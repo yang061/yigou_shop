@@ -8,6 +8,8 @@ Vue.component(typeNav.name, typeNav)
 
 // 引入路由
 import router from '@/router'
+import { getCategoryListAPI } from './api'
+getCategoryListAPI()
 
 Vue.config.productionTip = false
 

@@ -39,11 +39,12 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyWord"
           />
           <button
             class="sui-btn btn-xlarge btn-danger"
             type="button"
-            @click="$router.push('/search')"
+            @click="goSearch"
           >
             搜索
           </button>
@@ -55,7 +56,46 @@
 
 <script>
 export default {
-  name: 'my-header'
+  name: 'my-header',
+  data () {
+    return {
+      keyWord: ''
+    }
+  },
+  methods: {
+    // 搜索按钮的回调函数，要向search路由进行跳转
+    goSearch () {
+      // 路由传递参数
+      // 1.字符串形式,需要在search路由占位
+      // this.$router.push("/search/" + this.keyWord + "?k=" + this.keyWord.toUpperCase())
+      // 2.模板字符串
+      // this.$router.push(`/search/${this.keyWord}?k=${this.keyWord.toUpperCase()}`)
+      // 3.对象(优选)
+      // this.$router.push({ name: 'search', params: { keyword: this.keyWord }, query: { k: this.keyWord.toUpperCase() } })
+
+
+      // 面试题1.路由传递参数（对象写法）path是否可以结合params参数一起使用?
+      // this.$router.push({ path: '/search', params: { keyword: this.keyWord }, query: { k: this.keyWord.toUpperCase() } })
+
+      // 面试题2：如何指定params参数可传可不传? 
+      // 在配置路由时，在占位的后面加上一个问号【代表params参数可传可不传】
+      // 如果路由要求传递params参数，但你不传，就会发现url有问题(http://localhost:8080/#/?k=DSADA),不显示search
+      // this.$router.push({ name: 'search', query: { k: this.keyWord.toUpperCase() } })
+
+      // 面试题3：params参数可以传递也可以不传递，但是如果传递是空串，如何解决？
+      // 使用undefined可以解决
+      // this.$router.push({ name: 'search', params: { keyword: '' || undefined }, query: { k: this.keyWord.toUpperCase() } })
+
+      // 面试题4： 路由组件能不能传递props数据?
+      // 可以的：有三种写法
+      this.$router.push({ name: 'search', params: { keyword: this.keyWord }, query: { k: this.keyWord.toUpperCase() } }, () => { }, () => { })
+      console.log(this.$router); //this是组件实例对象(Search)
+      // this.$router属性：当前这个属性的属性值是VueRouter类的一个实例，当在入口文件（main.js）添加路由的时候,给组件实例添加的$router|$route属性
+      // push：VueRouter类的一个实例
+
+
+    }
+  }
 }
 </script>
 

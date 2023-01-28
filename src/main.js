@@ -8,8 +8,8 @@ Vue.component(typeNav.name, typeNav)
 
 // 引入路由
 import router from '@/router'
-import { getCategoryListAPI } from './api'
-getCategoryListAPI()
+//引入仓库
+import store from '@/store'
 
 Vue.config.productionTip = false
 
@@ -18,4 +18,6 @@ new Vue({
   // 注册路由,kv一致省略v，注意router是小写
   // 为什么要注册路由信息=> 让组件身上拥有$router和$route属性
   router,
+  //注册仓库：组件实例的身上会多了$store属性
+  store,
 }).$mount('#app')

@@ -27,7 +27,7 @@ import Like from '@/pages/Home/like'
 import Floor from '@/pages/Home/floor'
 import Brand from '@/pages/Home/brand'
 export default {
-  name: 'home',
+  name: 'myHome',
   components: { listContainer, Recommend, Rank, Like, Floor, Brand }
 }
 </script>

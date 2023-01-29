@@ -95,8 +95,6 @@ export default {
   },
   //组件挂载完毕，就可以向服务器请求数据(因为要把数据渲染到页面，使用不是创建阶段)
   mounted () {
-    //通知Vuex发送请求，获取数据存储在仓库中
-    this.$store.dispatch('categoryList')
     // 因为在跳转到search路由的时候，typeNav组件也会挂载，所以可以控制显示和隐藏
     if (this.$route.path !== '/home') {
       //如果不是路由组件，那就一开始隐藏三级联动

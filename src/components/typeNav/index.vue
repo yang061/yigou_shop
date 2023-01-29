@@ -64,6 +64,8 @@
 
 <script>
 import { mapState } from 'vuex'
+// 把lodash全部的功能都引入，最好按需引入
+import throttle from 'loadsh/throttle' //默认暴露，不加{}
 export default {
   name: 'typeNav',
   data () {
@@ -86,10 +88,15 @@ export default {
   },
   methods: {
     //鼠标进入回调===》修改响应式数据的currentIndex属性
-    changeIndex (index) {
+    //用es5的函数写法，key：value
+    //注意throttle回调函数不要用箭头函数，不然可能会出现上下文this指向问题
+    changeIndex: throttle(function (index) {
       // index:鼠标移入某一个一级分类的索引值
+      // 正常情况(用户慢慢滑动)：鼠标进入，每一个一级分类h3，都会触发鼠标进入事件
+      // 非正常情况(用户操作很快)：期待全部的一级分类都会触发鼠标进入事件，但经过测试只有部分会被触发
+      // 原因：由于用户行为过快，导致浏览器反应不过来。如果此时回调函数中有大量的业务，那就会出现卡断现象
       this.currentIndex = index
-    },
+    }, 50),
     //鼠标移出的回调
     leaveIndex () {
       this.currentIndex = -1

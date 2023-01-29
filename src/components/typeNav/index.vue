@@ -2,7 +2,49 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <h2 class="all">全部商品分类</h2>
+      <!-- 通过事件委托，把移除的方法交给父级，这样子元素都会触发 -->
+      <div @mouseleave="leaveIndex">
+        <h2 class="all">全部商品分类</h2>
+
+        <div class="sort">
+          <div class="all-sort-list2">
+            <!-- 一级分类(cate1) -->
+            <div
+              class="item"
+              v-for="(cate1, index) in categoryList"
+              :key="cate1.categoryId"
+              :class="{ cur: currentIndex == index }"
+            >
+              <h3 @mouseenter="changeIndex(index)">
+                <a href="">{{ cate1.categoryName }}</a>
+              </h3>
+              <div class="item-list clearfix">
+                <!-- 二级分类 -->
+                <div
+                  class="subitem"
+                  v-for="cate2 in cate1.categoryChild"
+                  :key="cate2.categoryId"
+                >
+                  <dl class="fore">
+                    <dt>
+                      <a href="">{{ cate2.categoryName }}</a>
+                    </dt>
+                    <!-- 三级分类 -->
+                    <dd>
+                      <em
+                        v-for="cate3 in cate2.categoryChild"
+                        :key="cate3.categoryId"
+                      >
+                        <a href="">{{ cate3.categoryName }}</a>
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -13,43 +55,6 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <!-- 一级分类(cate1) -->
-          <div
-            class="item"
-            v-for="cate1 in categoryList"
-            :key="cate1.categoryId"
-          >
-            <h3>
-              <a href="">{{ cate1.categoryName }}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <!-- 二级分类 -->
-              <div
-                class="subitem"
-                v-for="cate2 in cate1.categoryChild"
-                :key="cate2.categoryId"
-              >
-                <dl class="fore">
-                  <dt>
-                    <a href="">{{ cate2.categoryName }}</a>
-                  </dt>
-                  <!-- 三级分类 -->
-                  <dd>
-                    <em
-                      v-for="cate3 in cate2.categoryChild"
-                      :key="cate3.categoryId"
-                    >
-                      <a href="">{{ cate3.categoryName }}</a>
-                    </em>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -58,6 +63,12 @@
 import { mapState } from 'vuex'
 export default {
   name: 'typeNav',
+  data () {
+    return {
+      //存储用户鼠标移到哪一个当前一级分类的索引值
+      currentIndex: -1 //-1默认不显示
+    }
+  },
   //组件挂载完毕，就可以向服务器请求数据(因为要把数据渲染到页面，使用不是创建阶段)
   mounted () {
     //通知Vuex发送请求，获取数据存储在仓库中
@@ -69,7 +80,18 @@ export default {
     ...mapState({
       categoryList: (state) => state.home.categoryList
     })
-  }
+  },
+  methods: {
+    //鼠标进入回调===》修改响应式数据的currentIndex属性
+    changeIndex (index) {
+      // index:鼠标移入某一个一级分类的索引值
+      this.currentIndex = index
+    },
+    //鼠标移出的回调
+    leaveIndex () {
+      this.currentIndex = -1
+    }
+  },
 }
 </script>
 
@@ -128,7 +150,6 @@ export default {
               color: #333;
             }
           }
-
           .item-list {
             display: none;
             position: absolute;
@@ -188,6 +209,10 @@ export default {
               display: block;
             }
           }
+        }
+
+        .cur {
+          background-color: skyblue;
         }
       }
     }

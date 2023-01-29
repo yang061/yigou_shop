@@ -7,7 +7,7 @@
         <h2 class="all">全部商品分类</h2>
         <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <div class="all-sort-list2" @click="goSearch">
             <!-- 一级分类(cate1) -->
             <div
               class="item"
@@ -16,7 +16,12 @@
               :class="{ cur: currentIndex === index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a href="">{{ cate1.categoryName }}</a>
+                <!-- 添加自定义属性，来区分a标签和一级、二级、三级分类 -->
+                <a
+                  :data-categoryName="cate1.categoryName"
+                  :data-category1Id="cate1.categoryId"
+                  >{{ cate1.categoryName }}</a
+                >
               </h3>
               <div
                 class="item-list clearfix"
@@ -30,7 +35,11 @@
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ cate2.categoryName }}</a>
+                      <a
+                        :data-categoryName="cate2.categoryName"
+                        :data-category2Id="cate2.categoryId"
+                        >{{ cate2.categoryName }}</a
+                      >
                     </dt>
                     <!-- 三级分类 -->
                     <dd>
@@ -38,7 +47,11 @@
                         v-for="cate3 in cate2.categoryChild"
                         :key="cate3.categoryId"
                       >
-                        <a href="">{{ cate3.categoryName }}</a>
+                        <a
+                          :data-categoryName="cate3.categoryName"
+                          :data-category3Id="cate3.categoryId"
+                          >{{ cate3.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -100,6 +113,43 @@ export default {
     //鼠标移出的回调
     leaveIndex () {
       this.currentIndex = -1
+    },
+    // Home组件跳转到Search方法
+    goSearch () {
+      // 最好的解决方法：编程式导航+事件委托
+      // 事件委托：是把全部的子节点【h3、dt、dl、em】的事件委托给父亲节点
+      // 利用事件委托会出现一些问题：
+      // 1.因为需要点击a标签才能跳转，但怎么确定点击的一定是a标签(子节点很多) ？
+      // 2.即使你能确定点击的a标签，但如何确定是一级、二级、三级的a标签？
+      // 第一个问题：把子节点的a标签加上自定义属性data-categoryName,其余的子节点是没有的
+      let element = event.target
+      // 这样可以获取当前触发这个事件的节点【h3、a、dl、dt】，需要带有data-categoryname(浏览器自动变小写) 这样的节点【一定是a标签】
+      // 节点有一个属性dataset，可以获取节点的自定义属性和属性值
+      let { categoryname, category1id, category2id, category3id } = element.dataset
+      // 如果标签中有categoryname ,一定是a标签
+      if (categoryname) {
+        // 整理路由传递的参数
+        let location = { name: 'search' }
+        let query = { categoryName: categoryname }
+        //区分一级、二级、三级分类a标签 === 在添加一个自定义属性
+        if (category1id) {
+          //一级分类
+          query.categoryId = category1id
+        } else if (category2id) {
+          //二级
+          query.categoryId = category2id
+        } else if (category3id) {
+          //三级
+          query.categoryId = category3id
+        }
+        // 整理(合并)路由参数
+        // console.log(location, query); //两个对象
+        location.query = query
+        // 路由跳转
+        this.$router.push(location)
+
+      }
+
     }
   },
 }

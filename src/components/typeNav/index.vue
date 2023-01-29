@@ -5,7 +5,7 @@
       <!-- 通过事件委托，把移除的方法交给父级，这样子元素都会触发 -->
       <div @mouseleave="leaveIndex">
         <h2 class="all">全部商品分类</h2>
-
+        <!-- 三级联动 -->
         <div class="sort">
           <div class="all-sort-list2">
             <!-- 一级分类(cate1) -->
@@ -13,12 +13,15 @@
               class="item"
               v-for="(cate1, index) in categoryList"
               :key="cate1.categoryId"
-              :class="{ cur: currentIndex == index }"
+              :class="{ cur: currentIndex === index }"
             >
               <h3 @mouseenter="changeIndex(index)">
                 <a href="">{{ cate1.categoryName }}</a>
               </h3>
-              <div class="item-list clearfix">
+              <div
+                class="item-list clearfix"
+                :style="{ display: currentIndex === index ? 'block' : 'none' }"
+              >
                 <!-- 二级分类 -->
                 <div
                   class="subitem"
@@ -201,12 +204,6 @@ export default {
                   }
                 }
               }
-            }
-          }
-
-          &:hover {
-            .item-list {
-              display: block;
             }
           }
         }

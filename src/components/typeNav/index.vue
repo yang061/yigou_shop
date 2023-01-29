@@ -150,6 +150,10 @@ export default {
         }
         // 整理(合并)路由参数
         // console.log(location, query); //两个对象
+        // 判断：如果路由跳转的时候，带有params参数，就给它传过去
+        if (this.$route.params) {
+          location.params = this.$route.params
+        }
         location.query = query
         // 路由跳转
         this.$router.push(location)

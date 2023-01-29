@@ -88,10 +88,15 @@ export default {
 
       // 面试题4： 路由组件能不能传递props数据?
       // 可以的：有三种写法
-      this.$router.push({ name: 'search', params: { keyword: this.keyWord }, query: { k: this.keyWord.toUpperCase() } }, () => { }, () => { })
-      console.log(this.$router); //this是组件实例对象(Search)
-      // this.$router属性：当前这个属性的属性值是VueRouter类的一个实例，当在入口文件（main.js）添加路由的时候,给组件实例添加的$router|$route属性
-      // push：VueRouter类的一个实例
+      if (this.$route.query) {
+        // 如果有query参数，一起存到location中传给search
+        let location = {
+          name: 'search',
+          params: { keyword: this.keyWord },
+        }
+        location.query = this.$route.query
+        this.$router.push(location)
+      }
 
 
     }

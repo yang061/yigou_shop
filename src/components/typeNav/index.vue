@@ -3,63 +3,68 @@
   <div class="type-nav">
     <div class="container">
       <!-- 通过事件委托，把移除的方法交给父级，这样子元素都会触发 -->
-      <div @mouseleave="leaveIndex">
+      <div @mouseleave="leaveIndex" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
-        <!-- 三级联动 -->
-        <div class="sort">
-          <div class="all-sort-list2" @click="goSearch">
-            <!-- 一级分类(cate1) -->
-            <div
-              class="item"
-              v-for="(cate1, index) in categoryList"
-              :key="cate1.categoryId"
-              :class="{ cur: currentIndex === index }"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <!-- 添加自定义属性，来区分a标签和一级、二级、三级分类 -->
-                <a
-                  :data-categoryName="cate1.categoryName"
-                  :data-category1Id="cate1.categoryId"
-                  >{{ cate1.categoryName }}</a
-                >
-              </h3>
+        <!-- 过渡动画 -->
+        <transition name="sort">
+          <!-- 三级联动 -->
+          <div class="sort" v-show="show">
+            <div class="all-sort-list2" @click="goSearch">
+              <!-- 一级分类(cate1) -->
               <div
-                class="item-list clearfix"
-                :style="{ display: currentIndex === index ? 'block' : 'none' }"
+                class="item"
+                v-for="(cate1, index) in categoryList"
+                :key="cate1.categoryId"
+                :class="{ cur: currentIndex === index }"
               >
-                <!-- 二级分类 -->
+                <h3 @mouseenter="changeIndex(index)">
+                  <!-- 添加自定义属性，来区分a标签和一级、二级、三级分类 -->
+                  <a
+                    :data-categoryName="cate1.categoryName"
+                    :data-category1Id="cate1.categoryId"
+                    >{{ cate1.categoryName }}</a
+                  >
+                </h3>
                 <div
-                  class="subitem"
-                  v-for="cate2 in cate1.categoryChild"
-                  :key="cate2.categoryId"
+                  class="item-list clearfix"
+                  :style="{
+                    display: currentIndex === index ? 'block' : 'none',
+                  }"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a
-                        :data-categoryName="cate2.categoryName"
-                        :data-category2Id="cate2.categoryId"
-                        >{{ cate2.categoryName }}</a
-                      >
-                    </dt>
-                    <!-- 三级分类 -->
-                    <dd>
-                      <em
-                        v-for="cate3 in cate2.categoryChild"
-                        :key="cate3.categoryId"
-                      >
+                  <!-- 二级分类 -->
+                  <div
+                    class="subitem"
+                    v-for="cate2 in cate1.categoryChild"
+                    :key="cate2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
                         <a
-                          :data-categoryName="cate3.categoryName"
-                          :data-category3Id="cate3.categoryId"
-                          >{{ cate3.categoryName }}</a
+                          :data-categoryName="cate2.categoryName"
+                          :data-category2Id="cate2.categoryId"
+                          >{{ cate2.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <!-- 三级分类 -->
+                      <dd>
+                        <em
+                          v-for="cate3 in cate2.categoryChild"
+                          :key="cate3.categoryId"
+                        >
+                          <a
+                            :data-categoryName="cate3.categoryName"
+                            :data-category3Id="cate3.categoryId"
+                            >{{ cate3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -84,13 +89,19 @@ export default {
   data () {
     return {
       //存储用户鼠标移到哪一个当前一级分类的索引值
-      currentIndex: -1 //-1默认不显示
+      currentIndex: -1, //-1默认不显示
+      show: true,   //控制三级联动显示和隐藏
     }
   },
   //组件挂载完毕，就可以向服务器请求数据(因为要把数据渲染到页面，使用不是创建阶段)
   mounted () {
     //通知Vuex发送请求，获取数据存储在仓库中
     this.$store.dispatch('categoryList')
+    // 因为在跳转到search路由的时候，typeNav组件也会挂载，所以可以控制显示和隐藏
+    if (this.$route.path !== '/home') {
+      //如果不是路由组件，那就一开始隐藏三级联动
+      this.show = false
+    }
   },
   computed: {
     //对象形式,右侧需要的是一个函数，当使用到这个计算属性时，右侧函数会立即执行一次
@@ -110,10 +121,7 @@ export default {
       // 原因：由于用户行为过快，导致浏览器反应不过来。如果此时回调函数中有大量的业务，那就会出现卡断现象
       this.currentIndex = index
     }, 50),
-    //鼠标移出的回调
-    leaveIndex () {
-      this.currentIndex = -1
-    },
+
     // Home组件跳转到Search方法
     goSearch () {
       // 最好的解决方法：编程式导航+事件委托
@@ -150,7 +158,21 @@ export default {
 
       }
 
-    }
+    },
+    // 当鼠标移入的时候，让商品分类列表进行展示
+    enterShow () {
+      if (this.$route.path !== '/home') {
+        this.show = true
+      }
+    },
+    //鼠标移出的回调
+    leaveIndex () {
+      this.currentIndex = -1
+      // 如果当前路由不是'/home'，那鼠标移出时隐藏
+      if (this.$route.path !== '/home') {
+        this.show = false
+      }
+    },
   },
 }
 </script>
@@ -199,7 +221,7 @@ export default {
       .all-sort-list2 {
         .item {
           h3 {
-            line-height: 28px;
+            line-height: 27.2px;
             font-size: 14px;
             font-weight: 400;
             overflow: hidden;
@@ -269,6 +291,19 @@ export default {
           background-color: skyblue;
         }
       }
+    }
+    // 过渡动画的样式
+    // 过渡动画开始的状态(进入)
+    .sort-enter {
+      height: 0;
+    }
+    // 过渡动画结束的状态(进入)
+    .sort-enter-to {
+      height: 461px;
+    }
+    // 定义动画时间、速率
+    .sort-enter-active {
+      transition: all 0.5s linear;
     }
   }
 }

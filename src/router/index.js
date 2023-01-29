@@ -6,10 +6,10 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 // 引入路由组件
-import Home from '@/pages/Home'
-import Search from '@/pages/Search'
-import Login from '@/pages/Login'
-import Register from '@/pages/Register'
+import Home from '@/views/Home'
+import Search from '@/views/Search'
+import Login from '@/views/Login'
+import Register from '@/views/Register'
 // 先把VueRouter原型对象的push，先保存一份
 let orginPush = VueRouter.prototype.push
 // 先把VueRouter原型对象的replace，先保存一份

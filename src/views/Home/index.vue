@@ -20,12 +20,12 @@
 
 <script>
 // 引入组件
-import listContainer from '@/pages/Home/listContainer'
-import Recommend from '@/pages/Home/recommend'
-import Rank from '@/pages/Home/rank'
-import Like from '@/pages/Home/like'
-import Floor from '@/pages/Home/floor'
-import Brand from '@/pages/Home/brand'
+import listContainer from '@/views/Home/listContainer'
+import Recommend from '@/views/Home/recommend'
+import Rank from '@/views/Home/rank'
+import Like from '@/views/Home/like'
+import Floor from '@/views/Home/floor'
+import Brand from '@/views/Home/brand'
 export default {
   name: 'myHome',
   components: { listContainer, Recommend, Rank, Like, Floor, Brand }

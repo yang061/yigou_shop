@@ -1,4 +1,4 @@
-//对axios进行二次封装（后台真实的数据）
+//对axios进行二次封装（模拟数据）
 import axios from 'axios'
 // 引入进度条
 import nProgress from 'nprogress'
@@ -10,7 +10,7 @@ import "nprogress/nprogress.css"
 // 2.requests就是axios，只不过稍微配置了一下
 const requests = axios.create({
     //配置对象
-    baseURL: "/api",
+    baseURL: "/mock",
     // 代表请求超时的时间5s
     timeout: 5000
 })

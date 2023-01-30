@@ -11,8 +11,8 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!-- 楼层 -->
-    <Floor />
-    <Floor />
+    <!--props通信：【 :list="floor" 】 -->
+    <Floor v-for="(floor, index) in floorList" :key="floor.id" :list="floor" />
     <!-- 商标 -->
     <Brand />
   </div>
@@ -26,9 +26,23 @@ import Rank from '@/views/Home/rank'
 import Like from '@/views/Home/like'
 import Floor from '@/views/Home/floor'
 import Brand from '@/views/Home/brand'
+import { mapState } from 'vuex'
 export default {
   name: 'myHome',
-  components: { listContainer, Recommend, Rank, Like, Floor, Brand }
+  components: { listContainer, Recommend, Rank, Like, Floor, Brand },
+  computed: {
+    ...mapState({
+      //获取Vuex中state的floorList数据,数据在home组件里
+      floorList: state => state.home.floorList
+    })
+
+  },
+  mounted () {
+    //通知Vuex发送ajax请求，存储数据
+    this.$store.dispatch('getFloorList')
+  },
+
+
 }
 </script>
 

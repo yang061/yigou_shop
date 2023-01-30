@@ -95,7 +95,10 @@
 
 <script>
 export default {
-  name: 'myFloor'
+  name: 'myFloor',
+  // 接收home组件传过来的数据
+  props: ['list']
+
 }
 </script>
 

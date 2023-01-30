@@ -3,7 +3,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container" id="mySwiper" ref="mySwiper">
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
@@ -120,7 +120,7 @@ export default {
         //v-for执行完毕，才有结构【在watch里是没办法保证的】
         this.$nextTick(() => {
           //当你执行了这个回调的时候：保证服务器数据回来了，v-for执行完毕了【轮播图的数据一定有了】
-          new Swiper(document.querySelector('.swiper-container'), {
+          new Swiper(this.$refs.mySwiper, {
             loop: true, // 循环模式选项
 
             // 如果需要分页器

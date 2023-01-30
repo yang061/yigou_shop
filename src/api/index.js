@@ -18,3 +18,9 @@ export const getCategoryListAPI = () => {
  * @returns promise对象
  */
 export const getBannerListAPI = () => mockRequest.get('/banner')
+
+/**
+ * 获取floor组件的列表数据接口
+ * @returns promise 对象
+ */
+export const getFloorListAPI = () => mockRequest.get('/floor')

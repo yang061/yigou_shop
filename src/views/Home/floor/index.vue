@@ -29,23 +29,7 @@
             </div>
             <div class="floorBanner">
               <!-- 轮播图 -->
-              <div class="swiper-container" ref="floorSwiper">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="carousel in list.carouselList"
-                    :key="carousel.id"
-                  >
-                    <img :src="carousel.imgUrl" />
-                  </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <CaRousel :list="list.carouselList" />
             </div>
             <!-- 因为结构不一样，所以不能v-for遍历 -->
             <div class="split">
@@ -77,33 +61,10 @@
 </template>
 
 <script>
-import Swiper from 'swiper';
 export default {
   name: 'myFloor',
   // 接收home组件传过来的数据
   props: ['list'],
-  mounted () {
-    //第一次书写swiper时：在mounted中书写不可以，但现在可以
-    //原因：第一次写轮播图时，是在当前组件发生了请求（vuex中异步），此时数据还没回来，没有结构，所以在mounted中不行
-    //现在：发送请求在home父级中，父组件和子组件已经实现通信了【因此此时页面中一定有结构】
-    new Swiper(this.$refs.floorSwiper, {
-      loop: true, // 循环模式选项
-
-      // 如果需要分页器
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,  //可以点击分页器切换轮播图
-      },
-
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-
-    })
-  }
-
 }
 </script>
 

@@ -129,6 +129,33 @@ import SearchSelector from './SearchSelector/index.vue'
 import { mapGetters } from 'vuex';
 export default {
   name: 'mySearch',
+  data () {
+    return {
+      // 带给服务器的参数
+      searchParams: {
+        // 一级分类id
+        category1Id: "",
+        // 二级分类id
+        category2Id: "",
+        // 三级分类
+        category3Id: "",
+        // 分类名字
+        categoryName: "",
+        // 关键字
+        keyword: "",
+        //排序
+        order: "",
+        // 分页器用的
+        pageNo: 1, //代表当前是第几页
+        pageSize: 10, //每一页有几条数据
+        // 平台售卖属性的参数
+        props: [],
+        // 品牌
+        trademark: ""
+
+      }
+    }
+  },
   components: {
     SearchSelector
   },
@@ -136,9 +163,22 @@ export default {
     // mapGetters里面的写法：用的数组获取数据，因为getters计算是没有划分模块的【home、search】
     ...mapGetters(['goodsList'])
   },
+  beforeMount () {
+    // Object.assign 合并对象,可以把后面两个参数合并到第一个参数对象里面
+    Object.assign(this.searchParams, this.$route.query, this.$route.params)
+
+  },
+  // mounted只执行一次，但我们需要每次点击三级列表菜单都要请求数据，所以封装函数
   mounted () {
-    this.$store.dispatch('getSearchList')
-  }
+    // 在发送请求之前【beforeMount】把参数带给服务器
+    this.getData()
+  },
+  methods: {
+    // 根据参数不同返回不同的数据
+    getData () {
+      this.$store.dispatch('getSearchList', this.searchParams)
+    }
+  },
 }
 </script>
 

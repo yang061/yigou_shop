@@ -173,6 +173,7 @@ export default {
     // 在发送请求之前【beforeMount】把参数带给服务器
     this.getData()
   },
+  // 解决只能搜索一次的问题
   methods: {
     // 根据参数不同返回不同的数据
     getData () {

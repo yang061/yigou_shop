@@ -140,13 +140,13 @@ export default {
         //区分一级、二级、三级分类a标签 === 在添加一个自定义属性
         if (category1id) {
           //一级分类
-          query.categoryId = category1id
+          query.category1Id = category1id
         } else if (category2id) {
           //二级
-          query.categoryId = category2id
+          query.category2Id = category2id
         } else if (category3id) {
           //三级
-          query.categoryId = category3id
+          query.category3Id = category3id
         }
         // 整理(合并)路由参数
         // console.log(location, query); //两个对象

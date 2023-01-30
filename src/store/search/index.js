@@ -34,8 +34,8 @@ const getters = {
     attrsList (state) {
         return state.SearchList.attrsList || []
     },
-    trademark (state) {
-        return state.SearchList.trademark || []
+    trademarkList (state) {
+        return state.SearchList.trademarkList || []
     }
 }
 

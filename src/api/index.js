@@ -24,3 +24,16 @@ export const getBannerListAPI = () => mockRequest.get('/banner')
  * @returns promise 对象
  */
 export const getFloorListAPI = () => mockRequest.get('/floor')
+
+/**
+ * 获取搜索模块数据接口
+ * @param {*} params 当前接口需要传递一个默认参数，至少是一个空对象
+ * @returns promise对象
+ */
+export const getSearchInfoAPI = (params) => {
+    return requests({
+        url: '/list',
+        method: 'post',
+        data: params
+    })
+}

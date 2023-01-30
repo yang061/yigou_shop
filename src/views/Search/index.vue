@@ -164,6 +164,7 @@ export default {
     ...mapGetters(['goodsList'])
   },
   beforeMount () {
+    // 整理参数
     // Object.assign 合并对象,可以把后面两个参数合并到第一个参数对象里面
     Object.assign(this.searchParams, this.$route.query, this.$route.params)
 
@@ -180,6 +181,21 @@ export default {
       this.$store.dispatch('getSearchList', this.searchParams)
     }
   },
+  watch: {
+    // $route是和data里的数据(searchParams)平级的
+    $route () {
+      // 监视路由，路由变化时继续发请求
+      // 重新整理参数
+      Object.assign(this.searchParams, this.$route.params, this.$route.query)
+      // 发送ajax请求
+      this.getData()
+      // 每一次请求完毕，应该把一二三级分类以及关键字清空，让它好接收下一次的id【避免数据合并】,keyword会直接覆盖，不需要置空，就算当前分类没有这个keyword，返回空即可
+      this.searchParams.category1Id = ""
+      this.searchParams.category2Id = ""
+      this.searchParams.category3Id = ""
+
+    }
+  }
 }
 </script>
 

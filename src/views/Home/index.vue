@@ -12,7 +12,7 @@
     <Like />
     <!-- 楼层 -->
     <!--props通信：【 :list="floor" 】 -->
-    <Floor v-for="(floor, index) in floorList" :key="floor.id" :list="floor" />
+    <Floor v-for="floor in floorList" :key="floor.id" :list="floor" />
     <!-- 商标 -->
     <Brand />
   </div>

@@ -5,18 +5,13 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="@/assets/images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="carousel in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
-            <!-- <div class="swiper-slide">
-              <img src="@/assets/images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="@/assets/images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="@/assets/images/banner4.jpg" />
-            </div> -->
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -101,16 +96,49 @@
 
 <script>
 import { mapState } from 'vuex';
+//引包
+import Swiper from 'swiper'
 export default {
   name: 'listContainer',
   mounted () {
     // 派发action,通知vuex发送ajax请求，将数据存在仓库中
     this.$store.dispatch('getBannerList')
+    //在new Swiper实例之前，页面中必须有结构【在mounted中不行，因为结构不完整】
   },
   computed: {
     ...mapState({
       bannerList: state => state.home.bannerList
     })
+  },
+  watch: {
+    // 监听bannerList数据的变化，----由空数组变为四个元素
+    // 对象写法
+    bannerList: {
+      handler () {
+        //如果执行了handler方法，代表组件实例上已经有数据了【数组上有四个元素】
+        //当前函数执行，只能保证bannerList数据已经有了，不能保证v-for已经执行结束了
+        //v-for执行完毕，才有结构【在watch里是没办法保证的】
+        this.$nextTick(() => {
+          //当你执行了这个回调的时候：保证服务器数据回来了，v-for执行完毕了【轮播图的数据一定有了】
+          new Swiper(document.querySelector('.swiper-container'), {
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,  //可以点击分页器切换轮播图
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+
+          })
+        })
+      }
+    }
   }
 }
 </script>

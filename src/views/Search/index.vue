@@ -85,9 +85,10 @@
               <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+                    <!-- 声明式导航--跳转路由 ,记得带id【params】-->
+                    <router-link :to="`/detail/${good.id}`">
+                      <img :src="good.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -313,7 +314,7 @@ export default {
       this.searchParams.pageNo = pageNo
       // 重新发送请求
       this.getData()
-    }
+    },
   },
   watch: {
     // $route是和data里的数据(searchParams)平级的

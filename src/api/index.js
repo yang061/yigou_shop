@@ -37,3 +37,10 @@ export const getSearchInfoAPI = (params) => {
         data: params
     })
 }
+
+/**
+ * 获取商品详情信息接口
+ * @param {*} skuId 商品的id
+ * @returns promise对象
+ */
+export const getGoodsDetailInfoAPI = (skuId) => requests({ url: `/item/${skuId}` })

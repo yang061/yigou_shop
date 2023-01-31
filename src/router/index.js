@@ -5,11 +5,8 @@ import VueRouter from 'vue-router'
 // 使用插件
 Vue.use(VueRouter)
 
-// 引入路由组件
-import Home from '@/views/Home'
-import Search from '@/views/Search'
-import Login from '@/views/Login'
-import Register from '@/views/Register'
+// 引入路由信息模块
+import routes from '@/router/routers'
 // 先把VueRouter原型对象的push，先保存一份
 let orginPush = VueRouter.prototype.push
 // 先把VueRouter原型对象的replace，先保存一份
@@ -43,54 +40,11 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 // 定义路由组件
 export default new VueRouter({
     // 配置路由
-    routes: [
-        // 重定向，在项目跑起来的时候，访问/ 立马让它重定向到首页
-        {
-            path: '*',
-            redirect: '/home'
-        },
-        {
-            // 主页
-            path: '/home',
-            component: Home, //不加引号
-            meta: {
-                show: true //控制Footer组件是否显示
-            }
-        },
-        {
-            // 登录页
-            path: '/login',
-            component: Login,
-            meta: {
-                show: false //不显示Footer
-            }
-        },
-        {
-            // 注册页
-            path: '/register',
-            component: Register,
-            meta: {
-                show: false
-            }
-        },
-        {
-            // 搜索页,占位
-            path: '/search/:keyword?',
-            component: Search,
-            meta: {
-                show: false
-            },
-            name: 'search',
-            //路由组件能不能传递props数据?
-            // 布尔值写法:params
-            // props: true
-            // 对象写法,额外给路由组件传递一些props
-            // props: { a: 1, b: 2 }
-            // 函数写法：可以把params参数、query参数，通过props传递给路由组件
-            // 解构时要在最外加()，当成一个整体
-            props: ($route) => ({
-                keyword: $route.params.keyword, k: $route.query.k
-            })
-        }
-    ]
+    routes,
+    // 滚动行为，参数to, from, savedPosition
+    scrollBehavior () {
+        // return 期望滚动到哪个的位置
+        // y：0代表最上面【router3】  top:0 【router4】
+        return { y: 0 }
+    }
 })

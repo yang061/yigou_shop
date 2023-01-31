@@ -40,6 +40,7 @@ export default {
   mounted () {
     //通知Vuex发送ajax请求，存储数据
     this.$store.dispatch('getFloorList')
+
   },
 
 

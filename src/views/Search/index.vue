@@ -12,10 +12,16 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 分类名字的面包屑 -->
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName }}
+              <i @click="removeCategoryName">×</i>
+            </li>
+            <!-- 关键字的面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}
+              <i @click="removeKeyword">×</i>
+            </li>
           </ul>
         </div>
 
@@ -179,6 +185,43 @@ export default {
     // 根据参数不同返回不同的数据
     getData () {
       this.$store.dispatch('getSearchList', this.searchParams)
+    },
+    // 删除分类名字
+    removeCategoryName () {
+      // 把要给服务器的数据清空了，带给服务器的参数都是可有可无的：如果属性值是空的字符串还是会把相应的字段带给服务器
+      // 但是如果属性值是undefined ，那就不会带给服务器,性能更好
+      this.searchParams.categoryName = undefined
+      this.searchParams.category1Id = undefined
+      this.searchParams.category2Id = undefined
+      this.searchParams.category3Id = undefined
+      // 重新发送请求
+      this.getData()
+      // 地址栏也需要修改(删除的是query参数)，通过路由跳转（自己跳自己）
+      if (this.$route.params) {
+        // 有params参数要带过去
+        this.$router.push({ name: 'search', params: this.$route.params })
+      } else {
+        this.$router.push({ name: 'search' })
+      }
+
+
+    },
+    // 删除关键字
+    removeKeyword () {
+      // 清空关键字
+      this.searchParams.keyword = undefined
+      // 当面包写中的关键字清除后，需要让兄弟组件Header组件的关键字清除(配置全局事件总线)
+      // 请求数据
+      this.getData()
+      // 通知兄弟header组件清除关键字
+      this.$bus.$emit('clearKeyword')
+      // 清除导航栏中的params参数,携带当前路由的query参数
+      if (this.$route.query) {
+        this.$router.push({ name: 'search', query: this.$route.query })
+      } else {
+        this.$router.push({ name: 'search' })
+      }
+
     }
   },
   watch: {
@@ -190,9 +233,9 @@ export default {
       // 发送ajax请求
       this.getData()
       // 每一次请求完毕，应该把一二三级分类以及关键字清空，让它好接收下一次的id【避免数据合并】,keyword会直接覆盖，不需要置空，就算当前分类没有这个keyword，返回空即可
-      this.searchParams.category1Id = ""
-      this.searchParams.category2Id = ""
-      this.searchParams.category3Id = ""
+      this.searchParams.category1Id = undefined
+      this.searchParams.category2Id = undefined
+      this.searchParams.category3Id = undefined
 
     }
   }

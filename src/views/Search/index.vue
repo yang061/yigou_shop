@@ -48,24 +48,34 @@
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
+              <!-- 排序的结构-->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <!-- 当前searchParams.order里包含1，就显示综合高亮 -->
+                <li :class="{ active: isOne }" @click="orderChange('1')">
+                  <a href="#"
+                    >综合
+                    <i
+                      v-show="isOne"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantou_xiangxia': isDesc,
+                        'icon-jiantou_xiangshang': isAsc,
+                      }"
+                    ></i
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }" @click="orderChange('2')">
+                  <a href="#"
+                    >价格
+                    <i
+                      v-show="isTwo"
+                      class="iconfont"
+                      :class="{
+                        'icon-jiantou_xiangxia': isDesc,
+                        'icon-jiantou_xiangshang': isAsc,
+                      }"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -165,8 +175,8 @@ export default {
         categoryName: "",
         // 关键字
         keyword: "",
-        //排序
-        order: "",
+        //排序，默认值应该是综合、降序
+        order: "1:desc",
         // 分页器用的
         pageNo: 1, //代表当前是第几页
         pageSize: 10, //每一页有几条数据
@@ -183,7 +193,23 @@ export default {
   },
   computed: {
     // mapGetters里面的写法：用的数组获取数据，因为getters计算是没有划分模块的【home、search】
-    ...mapGetters(['goodsList'])
+    ...mapGetters(['goodsList']),
+    // 是否包含1
+    isOne () {
+      return this.searchParams.order.indexOf('1') !== -1
+    },
+    // 是否包含2
+    isTwo () {
+      return this.searchParams.order.indexOf('2') !== -1
+    },
+    // 是否为向上
+    isAsc () {
+      return this.searchParams.order.indexOf('asc') !== -1
+    },
+    // 是否为向下
+    isDesc () {
+      return this.searchParams.order.indexOf('desc') !== -1
+    }
   },
   beforeMount () {
     // 整理参数
@@ -272,6 +298,27 @@ export default {
       // 再次整理参数
       // splice:删除数组元素 split：分割数组
       this.searchParams.props.splice(index, 1)
+      // 发送请求
+      this.getData()
+    },
+    // 价格、综合改变点击事件
+    orderChange (flag) {
+      // flag来区分用户点击的是综合(1)还是价格(2),用户点击时传递过来的
+      // 首先存储默认flag值 和sort值
+      let originFlag = this.searchParams.order.split(':')[0]
+      let originSort = this.searchParams.order.split(':')[1]
+      // 存储新的order
+      let newOrder = ""
+      // 如果点击的是综合,就改变排序的箭头
+      if (flag == originFlag) {
+        // 如果当前分类的默认的(desc)就切换排序类型
+        newOrder = `${flag}:${originSort == 'desc' ? 'asc' : 'desc'}`
+      } else {
+        // 点击的价格,默认为降序(desc)
+        newOrder = `${flag}:${'desc'}`
+      }
+      // 整理数据
+      this.searchParams.order = newOrder
       // 发送请求
       this.getData()
     }
@@ -405,8 +452,13 @@ export default {
 
               &.active {
                 a {
+                  position: relative;
                   background: #e1251b;
                   color: #fff;
+                }
+                .iconfont {
+                  position: absolute;
+                  top: 13px;
                 }
               }
             }

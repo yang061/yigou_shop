@@ -122,7 +122,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <myPagination />
+          <myPagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          />
         </div>
       </div>
     </div>
@@ -131,7 +137,7 @@
 
 <script>
 import SearchSelector from './SearchSelector/index.vue'
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: 'mySearch',
   data () {
@@ -182,7 +188,13 @@ export default {
     // 是否为向下
     isDesc () {
       return this.searchParams.order.indexOf('desc') !== -1
-    }
+    },
+    // 获取search模块产品一共展示多少个
+    ...mapState({
+      total: state => state.search.SearchList.total
+
+    })
+
   },
   beforeMount () {
     // 整理参数
@@ -293,6 +305,13 @@ export default {
       // 整理数据
       this.searchParams.order = newOrder
       // 发送请求
+      this.getData()
+    },
+    // 接收子【Pagination】给父传递的自定义事件回调,以便知道当前点击的是第几页
+    getPageNo (pageNo) {
+      // 修改当前pageNo的数据
+      this.searchParams.pageNo = pageNo
+      // 重新发送请求
       this.getData()
     }
   },

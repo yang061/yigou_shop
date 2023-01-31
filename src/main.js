@@ -3,11 +3,13 @@ import App from '@/App.vue'
 // 三级联动组件--全局组件(放在component里面)
 import typeNav from '@/components/typeNav'
 import CaRousel from '@/components/Carousel'
+import myPagination from '@/components/Pagination'
 // 第一个参数：全局组件的名字(typeNav.name) 第二个参数：哪一个组件
 // typeNav.name可以获取组件的名字（不要加-）
 //两个参数要一样，第二个是其他组件想用时写的标签名
 Vue.component(typeNav.name, typeNav)
 Vue.component(CaRousel.name, CaRousel)
+Vue.component(myPagination.name, myPagination)
 
 // 引入路由
 import router from '@/router'

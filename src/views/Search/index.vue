@@ -28,11 +28,21 @@
               {{ searchParams.trademark.split(":")[1] }}
               <i @click="removeTradeMark">×</i>
             </li>
+            <!-- 商品售卖属性的面包屑 -->
+            <li
+              class="with-x"
+              v-for="(attrValue, index) in searchParams.props"
+              :key="index"
+            >
+              <!-- 分割为数组，展示属性值 -->
+              {{ attrValue.split(":")[1] }}
+              <i @click="removeAttr(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @trademarkInfo="trademarkInfo" />
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo" />
 
         <!--details-->
         <div class="details clearfix">
@@ -230,7 +240,7 @@ export default {
       }
 
     },
-    // 自定义事件回调
+    // 品牌信息自定义事件回调
     trademarkInfo (trademark) {
       // 1.整理品牌字段参数 "ID:品牌信息"
       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
@@ -242,6 +252,27 @@ export default {
       // 清空品牌信息
       this.searchParams.trademark = undefined
       // 再次发请求
+      this.getData()
+    },
+    // 属性信息自定义事件
+    attrInfo (attr, attrValue) {
+      // 把收到的两个参数存取到searchParams
+      // props:['属性ID：属性值：属性名']
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      // 数组去重，if语句中如果只有一行代码可以省略大花括号
+      if (this.searchParams.props.indexOf(props) == -1) {
+        // 当前数组中没有，就存到数组中
+        this.searchParams.props.push(props)
+      }
+      // 发送请求
+      this.getData()
+    },
+    // 删除售卖属性的点击事件，通过索引值区分
+    removeAttr (index) {
+      // 再次整理参数
+      // splice:删除数组元素 split：分割数组
+      this.searchParams.props.splice(index, 1)
+      // 发送请求
       this.getData()
     }
   },

@@ -16,11 +16,13 @@
     <button v-if="startNumAndEndNum.startNum > 2">···</button>
 
     <!-- 中间部分 -->
+    <!-- :class="{ active: pageNo == page }" 动态添加类名，给当前页添加 -->
     <button
       v-for="(page, index) in startNumAndEndNum.endNum"
       :key="index"
       v-show="page >= startNumAndEndNum.startNum"
       @click="$emit('getPageNo', page)"
+      :class="{ active: pageNo == page }"
     >
       {{ page }}
     </button>
@@ -31,11 +33,15 @@
     <button
       v-if="startNumAndEndNum.endNum < totalPage"
       @click="$emit('getPageNo', totalPage)"
-      :disabled="pageNo == totalPage"
     >
       {{ totalPage }}
     </button>
-    <button @click="$emit('getPageNo', pageNo + 1)">下一页</button>
+    <button
+      @click="$emit('getPageNo', pageNo + 1)"
+      :disabled="pageNo == totalPage"
+    >
+      下一页
+    </button>
 
     <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>

@@ -158,7 +158,7 @@ export default {
         order: "1:desc",
         // 分页器用的
         pageNo: 1, //代表当前是第几页
-        pageSize: 10, //每一页有几条数据
+        pageSize: 5, //每一页有几条数据
         // 平台售卖属性的参数
         props: [],
         // 品牌

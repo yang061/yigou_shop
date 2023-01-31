@@ -22,11 +22,17 @@
               {{ searchParams.keyword }}
               <i @click="removeKeyword">×</i>
             </li>
+            <!-- 品牌的面包屑 -->
+            <!-- split(":")[1] 通过：切割为数组，选第二个 -->
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1] }}
+              <i @click="removeTradeMark">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo" />
 
         <!--details-->
         <div class="details clearfix">
@@ -217,11 +223,26 @@ export default {
       this.$bus.$emit('clearKeyword')
       // 清除导航栏中的params参数,携带当前路由的query参数
       if (this.$route.query) {
+        // 有query参数就携带上
         this.$router.push({ name: 'search', query: this.$route.query })
       } else {
         this.$router.push({ name: 'search' })
       }
 
+    },
+    // 自定义事件回调
+    trademarkInfo (trademark) {
+      // 1.整理品牌字段参数 "ID:品牌信息"
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
+      // 2.再次发请求
+      this.getData()
+    },
+    // 删除品牌信息
+    removeTradeMark () {
+      // 清空品牌信息
+      this.searchParams.trademark = undefined
+      // 再次发请求
+      this.getData()
     }
   },
   watch: {

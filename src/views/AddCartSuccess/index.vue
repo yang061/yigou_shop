@@ -35,7 +35,7 @@ export default {
       // JSON.parse 将字符串转换为对象
       return JSON.parse(sessionStorage.getItem("SkuInfo"))
     }
-  }
+  },
 }
 </script>
 

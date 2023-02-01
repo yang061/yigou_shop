@@ -1,9 +1,12 @@
 import { getGoodsDetailInfoAPI, addOrUpdateShopCartAPI } from '@/api'
+// 生成随机的字符串【游客身份】---uuid
+import { getUUID } from '@/utils/uuid_token'
 // 详情页的vuex
 const state = {
     goodsDetailList: {},
     // shopCartInfo: {}
-
+    // 游客临时身份
+    uuid_token: getUUID()
 }
 const mutations = {
     // 获取商品详情信息
@@ -24,7 +27,7 @@ const actions = {
         }
     },
     // 将产品添加到购物车
-    async addOrUpdateShopCart ({ commit }, { skuId, skuNum }) {
+    async addOrUpdateShopCart ({ skuId, skuNum }) {
         const res = await addOrUpdateShopCartAPI(skuId, skuNum)
         // 加入购物车后，只是把数据保存了，此时，不需要存储【没有返回其他数据】
         if (res.code === 200) {

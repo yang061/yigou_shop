@@ -56,3 +56,9 @@ export const addOrUpdateShopCartAPI = (skuId, skuNum) => {
         method: 'post',
     })
 }
+
+/**
+ * 获取购物车列表信息
+ * @returns promise
+ */
+export const getShopCartListAPI = () => requests({ url: '/cart/cartList' })

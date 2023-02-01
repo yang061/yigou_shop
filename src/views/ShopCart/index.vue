@@ -151,6 +151,16 @@
 <script>
 export default {
   name: 'ShopCart',
+  mounted () {
+
+
+  },
+  methods: {
+    // 派发action获取购物车信息
+    getData () {
+      this.$store.dispatch('getShopCartList')
+    }
+  }
 }
 </script>
 

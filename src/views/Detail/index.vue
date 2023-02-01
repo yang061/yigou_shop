@@ -83,29 +83,19 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
+              <dl v-for="spuSaleAttr in spuSaleAttrList" :key="spuSaleAttr.id">
+                <dt class="title">{{ spuSaleAttr.saleAttrName }}</dt>
+                <dd
+                  changepirce="0"
+                  :class="{ active: saleAttrValue.isChecked == 1 }"
+                  v-for="saleAttrValue in saleAttr.spuSaleAttrValueList"
+                  :key="saleAttrValue.id"
+                  @click="
+                    changeChecked(saleAttrValue, saleAttr.spuSaleAttrValueList)
+                  "
+                >
+                  {{ saleAttrValue.saleAttrValueName }}
+                </dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -364,7 +354,7 @@ export default {
     Zoom
   },
   computed: {
-    ...mapGetters(['categoryView', 'skuInfo', 'valuesSkuJson']),
+    ...mapGetters(['categoryView', 'skuInfo', 'spuSaleAttrList']),
     // 传给子组件的数据
     skuImageList () {
       // 如果服务器数据没有回来，就是空数组
@@ -374,7 +364,21 @@ export default {
   mounted () {
     // 派发action获取商品详情信息
     this.$store.dispatch('getGoodsDetailInfo', this.$route.params.skuId)
-  }
+  },
+  methods: {
+    changeChecked (saleAttrValue, arr) {
+      console.log(this.skuInfo);
+      //响应式数据:对象、数组
+      //数组的响应式数据:变更、替换【基本类型数据、引用类型对象响应式的】
+      //数组里面是基本类型数据：替换、变更    如果对象，不管你怎么玩都是相应的!!!!
+      //排他操作
+      //底下的代码:修改数组里面的对象【相应的式的】,数据变化视图跟这变化！！！
+      arr.forEach((item) => {
+        item.isChecked = "0";
+      });
+      saleAttrValue.isChecked = "1";
+    },
+  },
 }
 </script>
 

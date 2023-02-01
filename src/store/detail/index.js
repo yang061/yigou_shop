@@ -20,16 +20,17 @@ const actions = {
 }
 const getters = {
     // 服务器没回来时应该有个空对象值，不能为undefined
-    // 分类名称(面包屑)
+    // 路径导航(面包屑)简化
     categoryView () {
         return state.goodsDetailList.categoryView || {}
     },
-    // 商品详情
+    // 商品详情简化
     skuInfo () {
         return state.goodsDetailList.skuInfo || {}
     },
-    valuesSkuJson () {
-        return state.goodsDetailList.valuesSkuJson || {}
+    // 商品售卖属性简化
+    spuSaleAttrList () {
+        return state.goodsDetailList.spuSaleAttrList || []
     }
 
 }

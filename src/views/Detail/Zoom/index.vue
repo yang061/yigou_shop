@@ -1,24 +1,61 @@
 <template>
+  <!-- 放大镜 -->
   <div class="spec-preview">
     <img :src="imgObj.imgUrl" />
-    <div class="event"></div>
+    <div class="event" @mousemove="handler"></div>
     <div class="big">
-      <img :src="imgObj.imgUrl" />
+      <img :src="imgObj.imgUrl" ref="big" />
     </div>
-    <div class="mask"></div>
+    <!-- 遮罩层 -->
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
 <script>
 export default {
   name: "myZoom",
+  data () {
+    return {
+      currentIndex: 0
+    }
+  },
   props: ['skuImageList'],
   computed: {
     imgObj () {
       // 没返回数据时是空对象
-      return this.skuImageList[0] || {}
+      return this.skuImageList[this.currentIndex] || {}
     }
-  }
+  },
+  mounted () {
+    // 全局事件总线
+    this.$bus.$on('changeIndex', (index) => {
+      // 存储数据
+      this.currentIndex = index
+    })
+  },
+  methods: {
+    // 鼠标移动事件回调
+    handler () {
+      let mask = this.$refs.mask
+      let big = this.$refs.big
+      let left = event.offsetX - mask.offsetWidth / 2
+      let top = event.offsetY - mask.offsetHeight / 2
+
+      if (top <= 0) top = 0
+      if (top >= mask.offsetHeight) top = mask.offsetHeight
+      if (left <= 0) left = 0
+      if (left >= mask.offsetWidth) left = mask.offsetWidth
+      // 修改遮罩层的top和left值
+      mask.style.top = top + 'px'
+      mask.style.left = left + 'px'
+      // 修改大图的数据，因为big图的宽高是200%，所以要乘以-2【原本不加是偏右下，负代表上和左】
+      big.style.top = -2 * top + 'px'
+      big.style.left = -2 * left + 'px'
+
+
+
+    }
+  },
 }
 </script>
 

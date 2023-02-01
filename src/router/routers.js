@@ -54,5 +54,11 @@ export default
             path: '/detail/:skuId',
             component: () => import('@/views/Detail'),
             meta: { Show: true }, //显示头部组件
+        },
+        {
+            // 添加购物车成功组件,路由路径一定小写
+            path: '/addcartsuccess',
+            name: 'addcartsuccess',
+            component: () => import('@/views/AddCartSuccess')
         }
     ]

@@ -418,13 +418,16 @@ export default {
       try {
         await this.$store.dispatch('addOrUpdateShopCart',
           { skuId: this.$route.params.skuId, skuNum: this.skuNum })
+        // 2.服务器存储成功 ---进行路由跳转，传递参数
+        this.$router.push({ name: 'addcartsuccess' })
       } catch (error) {
+        // 3.失败给用户提示 
         alert(error.message)
       }
 
-      // 2.服务器存储成功 ---进行路由跳转，传递参数
 
-      // 3.失败给用户提示 
+
+
     }
   },
 }

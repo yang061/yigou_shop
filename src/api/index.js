@@ -44,3 +44,15 @@ export const getSearchInfoAPI = (params) => {
  * @returns promise对象
  */
 export const getGoodsDetailInfoAPI = (skuId) => requests({ url: `/item/${skuId}` })
+
+/**
+ * 将产品添加到购物车中(或更新一个产品的个数)
+ * @param {} param0  skuID：产品id  skuNum：产品数量
+ * @returns promise对象
+ */
+export const addOrUpdateShopCartAPI = (skuId, skuNum) => {
+    return requests({
+        url: `/cart/addToCart/${skuId}/${skuNum}`,
+        method: 'post',
+    })
+}

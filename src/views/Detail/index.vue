@@ -115,7 +115,8 @@
                 >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <!-- 以前的路由跳转都是从A跳到B，这里加入购物车进行路由跳转之前，需要发请求，把你购买的商品信息通过请求的形式通知服务器，让服务器进行存储 -->
+                <a @click="addShopCar">加入购物车</a>
               </div>
             </div>
           </div>
@@ -404,6 +405,26 @@ export default {
         // 合法.parseInt取整数部分【大于1，且不为小数】
         this.skuNum = parseInt(value)
       }
+    },
+    // 加入购物车的回调函数
+    async addShopCar () {
+      // 1.发请求---将产品加入到数据库(通知服务器)
+      /* 发请求完毕，需要知道请求成功/失败的结果 
+      this.$store.dispatch('addOrUpdateShopCartAPI', { skuId: this.$route.params.skuId, skuNum: this.skuNum }) 
+      这行代码作用：调用仓库的addOrUpdateShopCart，返回promise对象【因为有async】
+      promise要么成功，要么失败
+      再把当前的返回值变为promise对象，就可以接收到action中的return值了
+      */
+      try {
+        await this.$store.dispatch('addOrUpdateShopCart',
+          { skuId: this.$route.params.skuId, skuNum: this.skuNum })
+      } catch (error) {
+        alert(error.message)
+      }
+
+      // 2.服务器存储成功 ---进行路由跳转，传递参数
+
+      // 3.失败给用户提示 
     }
   },
 }

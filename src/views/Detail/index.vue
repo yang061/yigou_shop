@@ -85,7 +85,7 @@
               <div class="choosed"></div>
               <dl v-for="spuSaleAttr in spuSaleAttrList" :key="spuSaleAttr.id">
                 <dt class="title">{{ spuSaleAttr.saleAttrName }}</dt>
-                <dd
+                <!-- <dd
                   changepirce="0"
                   :class="{ active: saleAttrValue.isChecked == 1 }"
                   v-for="saleAttrValue in saleAttr.spuSaleAttrValueList"
@@ -95,7 +95,7 @@
                   "
                 >
                   {{ saleAttrValue.saleAttrValueName }}
-                </dd>
+                </dd> -->
               </dl>
             </div>
             <div class="cartWrap">
@@ -380,6 +380,7 @@ export default {
   mounted () {
     // 派发action获取商品详情信息
     this.$store.dispatch('getGoodsDetailInfo', this.$route.params.skuId)
+
   },
   methods: {
     changeChecked (saleAttrValue, arr) {
@@ -416,16 +417,21 @@ export default {
       再把当前的返回值变为promise对象，就可以接收到action中的return值了
       */
       try {
+        console.log(1);
         await this.$store.dispatch('addOrUpdateShopCart',
-          { skuId: this.$route.params.skuId, skuNum: this.skuNum })
+          {
+            skuId: this.$route.params.skuId,
+            skuNum: this.skuNum
+          })
         // 2.服务器存储成功 ---进行路由跳转，传递参数
         // 3.在路由跳转时需要把数据携带过去
         // 会话存储一般是存字符串的，所以对象要转换为字符串
-        sessionStorage.setItem('SkuInfo', JSON.stringify(this.skuInfo))
+        sessionStorage.setItem('SKUINFO', JSON.stringify(this.skuInfo))
         // 传递skuNum
         this.$router.push({ name: 'addcartsuccess', query: { skuNum: this.skuNum } })
       } catch (error) {
         // 3.失败给用户提示 
+        console.log(this.$route.params.skuId, this.skuNum);
         alert(error.message)
       }
     }

@@ -26,7 +26,6 @@ requests.interceptors.request.use((config) => {
     }
     // 进度条开始
     nProgress.start()
-
     return config
 })
 

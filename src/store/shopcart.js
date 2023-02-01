@@ -1,7 +1,7 @@
 import { getShopCartListAPI } from "@/api"
 //购物车组件的小仓库
 const state = {
-    ShopCartList: {}
+    ShopCartList: []
 }
 const mutations = {
     // 获取购物车列表
@@ -20,6 +20,9 @@ const actions = {
 }
 
 const getters = {
+    ShopCartList (state) {
+        return state.ShopCartList[0] || {}
+    },
 
 }
 

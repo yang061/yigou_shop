@@ -33,7 +33,7 @@ export default {
   computed: {
     skuInfo () {
       // JSON.parse 将字符串转换为对象
-      return JSON.parse(sessionStorage.getItem("SkuInfo"))
+      return JSON.parse(sessionStorage.getItem("SKUINFO"))
     }
   },
 }

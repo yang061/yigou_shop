@@ -60,5 +60,11 @@ export default
             path: '/addcartsuccess',
             name: 'addcartsuccess',
             component: () => import('@/views/AddCartSuccess')
+        },
+        {
+            // 购物车路由
+            path: '/shopcart',
+            name: 'shopcart',
+            component: () => import('@/views/ShopCart')
         }
     ]

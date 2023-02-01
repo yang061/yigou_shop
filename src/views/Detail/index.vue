@@ -419,15 +419,15 @@ export default {
         await this.$store.dispatch('addOrUpdateShopCart',
           { skuId: this.$route.params.skuId, skuNum: this.skuNum })
         // 2.服务器存储成功 ---进行路由跳转，传递参数
-        this.$router.push({ name: 'addcartsuccess' })
+        // 3.在路由跳转时需要把数据携带过去
+        // 会话存储一般是存字符串的，所以对象要转换为字符串
+        sessionStorage.setItem('SkuInfo', JSON.stringify(this.skuInfo))
+        // 传递skuNum
+        this.$router.push({ name: 'addcartsuccess', query: { skuNum: this.skuNum } })
       } catch (error) {
         // 3.失败给用户提示 
         alert(error.message)
       }
-
-
-
-
     }
   },
 }

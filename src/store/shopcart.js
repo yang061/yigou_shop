@@ -1,4 +1,4 @@
-import { getShopCartListAPI } from "@/api"
+import { getShopCartListAPI, delShopCartAPI } from "@/api"
 //购物车组件的小仓库
 const state = {
     ShopCartList: []
@@ -16,7 +16,16 @@ const actions = {
         if (res.code === 200) {
             commit('GETSHOPCARTLIST', res.data)
         }
+    },
+    async delShopCart ({ commit }, skuId) {
+        const res = await delShopCartAPI(skuId)
+        if (res.code == 200) {
+            return 'ok'
+        } else {
+            return Promise.reject(new Error('failed'))
+        }
     }
+
 }
 
 const getters = {

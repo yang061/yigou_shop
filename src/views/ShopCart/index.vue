@@ -57,7 +57,7 @@
             }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a @click="delShopCartFn(cart.skuId)" class="sindelet">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -90,10 +90,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { throttle } from 'lodash'
 export default {
   name: 'ShopCart',
   mounted () {
     this.getData()
+    // console.log(debounce());
   },
   computed: {
     ...mapGetters(['ShopCartList']),
@@ -125,7 +127,7 @@ export default {
       this.$store.dispatch('getShopCartList')
     },
     //修改产品数量回调
-    async changeSkuNum (type, disNum, cart) {
+    changeSkuNum: throttle(async function (type, disNum, cart) {
       // type:用于区分点击的类型
       // disNum:变化量(1) 变化量(-1) input框的总数
       // cart:点击的是哪个产品【因为有id】
@@ -145,8 +147,9 @@ export default {
             // 是非法数字【有汉字】
             disNum = 0 //不变
           } else {
-            //排除小数，取整,取变化值
+            //排除小数，取整,取变化值,排除差值负数的情况
             disNum = parseInt(disNum) - cart.skuNum
+
           }
           // 三元表达式,可读性差
           // disNum = isNaN(disNum) || disNum < 1 ? 0 : parseInt(disNum) - cart.skuNum
@@ -158,11 +161,25 @@ export default {
         // 重新请求数据【获取购物车信息】
         this.getData()
       } catch (error) {
-
+        alert(error.message)
+      }
+    }, 1000)
+    ,
+    //删除产品点击事件
+    async delShopCartFn (skuId) {
+      try {
+        // 发请求
+        await this.$store.dispatch('delShopCart', skuId)
+        // 删除成功，再发请求
+        this.getData()
+      } catch (error) {
+        // 删除失败
+        alert('删除失败')
       }
     }
   }
 }
+
 </script>
 
 <style lang="less" scoped>

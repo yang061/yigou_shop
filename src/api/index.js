@@ -62,3 +62,15 @@ export const addOrUpdateShopCartAPI = (skuId, skuNum) => {
  * @returns promise
  */
 export const getShopCartListAPI = () => requests({ url: '/cart/cartList' })
+
+/**
+ * 删除购物车产品接口
+ * @param {*} skuId 商品id
+ * @returns promise对象
+ */
+export const delShopCartAPI = (skuId) => {
+    return requests({
+        url: `/cart/deleteCart/${skuId}`,
+        method: 'delete'
+    })
+}

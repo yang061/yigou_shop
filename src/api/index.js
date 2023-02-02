@@ -82,3 +82,36 @@ export const delShopCartAPI = (skuId) => {
  * @returns promise对象
  */
 export const changeSkuStateAPI = (skuID, isChecked) => requests({ url: `/cart/checkCart/${skuID}/${isChecked}` })
+
+/**
+ * 获取验证码接口
+ * @param {*} phone 用户手机号
+ * @returns promise
+ */
+export const getCodeAPI = (phone) => requests({ url: `/user/passport/sendCode/${phone}` })
+
+/**
+ * 注册接口
+ * @param {*} param0 data:{ phone:手机号, password：密码, code：验证码 }
+ * @returns promise对象
+ */
+export const registerAPi = (data) => {
+    return requests({
+        url: '/user/passport/register',
+        method: 'post',
+        data
+    })
+}
+
+/**
+ * 登录接口
+ * @param {*} data {phone:手机号，password：m密码}
+ * @returns promise
+ */
+export const loginAPI = (data) => {
+    return requests({
+        url: '/user/passport/login',
+        method: 'post',
+        data
+    })
+}

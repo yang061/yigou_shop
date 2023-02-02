@@ -18,6 +18,7 @@
               type="checkbox"
               name="chk_list"
               :checked="cart.isChecked === 1"
+              @change="changeChecked(cart, $event)"
             />
           </li>
           <li class="cart-list-con2">
@@ -70,7 +71,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="deleteAllCheckedCart">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -127,6 +128,7 @@ export default {
       this.$store.dispatch('getShopCartList')
     },
     //修改产品数量回调
+    // TIP 节流
     changeSkuNum: throttle(async function (type, disNum, cart) {
       // type:用于区分点击的类型
       // disNum:变化量(1) 变化量(-1) input框的总数
@@ -138,7 +140,7 @@ export default {
           //带给服务器的变化量
           disNum = 1
           break;
-        case 'minus':
+        case 'mins':
           // 当前产品的数量大于1才会给服务器【-1===>减1；0===>不变】
           disNum = cart.skuNum > 1 ? -1 : 0
           break;
@@ -175,6 +177,31 @@ export default {
       } catch (error) {
         // 删除失败
         alert('删除失败')
+      }
+    },
+    // 改变选中状态回调
+    async changeChecked (cart, event) {
+      // 发送请求
+      try {
+        // 修改数据成功
+        // event.target.checked 返回布尔值，但是带给服务器的应该是数字 0|1
+        let isChecked = event.target.checked === true ? 1 : 0
+        await this.$store.dispatch('changeSkuState', { skuId: cart.skuId, isChecked })
+        this.getData()
+      } catch (error) {
+        // 修改数据失败
+        alert(error.message)
+      }
+    },
+    // 删除所有选中的商品==》点击事件
+    // 没办法收集到有效数据
+    async deleteAllCheckedCart () {
+      try {
+        await this.$store.dispatch("deleteAllCheckedCart")
+        // 获取数据
+        this.getData()
+      } catch (error) {
+        alert(error.message)
       }
     }
   }

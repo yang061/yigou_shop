@@ -417,7 +417,6 @@ export default {
       再把当前的返回值变为promise对象，就可以接收到action中的return值了
       */
       try {
-        console.log(1);
         await this.$store.dispatch('addOrUpdateShopCart',
           {
             skuId: this.$route.params.skuId,

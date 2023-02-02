@@ -74,3 +74,11 @@ export const delShopCartAPI = (skuId) => {
         method: 'delete'
     })
 }
+
+/**
+ * 切换商品选中状态接口
+ * @param {*} skuID 产品id
+ * @param {*} isChecked 产品选中状态
+ * @returns promise对象
+ */
+export const changeSkuStateAPI = (skuID, isChecked) => requests({ url: `/cart/checkCart/${skuID}/${isChecked}` })

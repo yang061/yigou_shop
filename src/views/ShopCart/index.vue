@@ -71,7 +71,7 @@
           class="chooseAll"
           type="checkbox"
           :checked="isCheckedAll && cartInfoList.length > 0"
-          @change="changeCheckedState($event)"
+          @click="changeCheckedState($event)"
         />
         <span>全选</span>
       </div>
@@ -107,7 +107,8 @@ export default {
     ...mapGetters(['ShopCartList']),
     // 计算出来的购物车数据
     cartInfoList () {
-      return this.ShopCartList.cartInfoList
+      // 防止加载中结构还没出来报错
+      return this.ShopCartList.cartInfoList || []
     },
     // 所有被选商品的总价
     totalPrice () {
@@ -123,7 +124,7 @@ export default {
     // 判断是否全选【全部都被勾选全选才会被勾选】
     isCheckedAll () {
       // every，遍历数组，只有数组中全部元素的isChecked属性都为1===》真，否则===》假，返回布尔值
-      return this.cartInfoList.every(item => item.isChecked == 1)
+      return this.cartInfoList.every((item) => item.isChecked == 1)
     }
 
   },

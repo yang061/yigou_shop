@@ -41,7 +41,7 @@ const actions = {
         // 遍历getters里面的ShopCartList，选择出被选中的，获取其id
         let promiseAll = []
         getters.ShopCartList.cartInfoList.forEach((item) => {
-            // 这样会返回一个promise对象【因为delShopCart上有async修饰】，item.isChecked为1，promise对象为true ；反之为false
+            // 这样会返回一个promise对象【因为delShopCart上有async修饰】，dispatch删除成功，promise对象为true ；反之为false
             let promise = item.isChecked == 1 ? dispatch('delShopCart', item.skuId) : ''
             // 把每一个promise存到数组中
             promiseAll.push(promise)
@@ -49,6 +49,18 @@ const actions = {
         console.log(Promise.all(promiseAll));
         // 只有全部的p1|p2...都成功，返回值才是成功
         // 如果有一个失败，返回值即为失败
+        return Promise.all(promiseAll)
+    },
+    //切换全选状态
+    async changeAllSkuState ({ dispatch, getters }, isChecked) {
+        // 通过changeSkuState切换,下面的是数组
+        let promiseAll = []
+        getters.ShopCartList.cartInfoList.forEach(item => {
+            // 遍历
+            let promise = dispatch('changeSkuState', { skuId: item.skuId, isChecked })
+            // 存储到promiseAll中，便于判断是否成功
+            promiseAll.push(promise)
+        })
         return Promise.all(promiseAll)
     }
 

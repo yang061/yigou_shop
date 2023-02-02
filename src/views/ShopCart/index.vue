@@ -67,7 +67,12 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isCheckedAll" />
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="isCheckedAll && cartInfoList.length > 0"
+          @change="changeCheckedState($event)"
+        />
         <span>全选</span>
       </div>
       <div class="option">
@@ -203,6 +208,21 @@ export default {
       } catch (error) {
         alert(error.message)
       }
+    },
+    //切换全选状态
+    async changeCheckedState (event) {
+      // try大括号里面的代码都会走
+      try {
+        // event.target.value,布尔值；选中==》true，反之，false
+        let isChecked = event.target.checked ? '1' : '0'
+        // 派发action，让所有的单选框状态跟随全选状态
+        await this.$store.dispatch('changeAllSkuState', isChecked)
+        //重新获取数据
+        this.getData()
+      } catch (error) {
+        alert(error.message)
+      }
+
     }
   }
 }

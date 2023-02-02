@@ -24,6 +24,10 @@ requests.interceptors.request.use((config) => {
         // 请求头加一个字段(userTempId:后台要求的)
         config.headers.userTempId = store.state.detail.uuid_token
     }
+    //添加token,如果有token就带上
+    if (store.state.user.token) {
+        config.headers.token = store.state.user.token
+    }
     // 进度条开始
     nProgress.start()
     return config

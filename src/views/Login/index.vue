@@ -38,7 +38,10 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
+              <!-- prevent阻止form表单默认行为 -->
+              <button class="btn" @click.prevent="loginFn">
+                登&nbsp;&nbsp;录
+              </button>
             </form>
 
             <div class="call clearFix">
@@ -81,6 +84,19 @@ export default {
     return {
       phone: '',
       password: '',
+    }
+  },
+  methods: {
+    // 登录的回调函数
+    async loginFn () {
+      try {
+        const { phone, password } = this;
+        (phone && password) && await this.$store.dispatch('login', { phone, password })
+        // 路由跳转到home首页
+        this.$router.push('/home')
+      } catch (error) {
+        alert(error.message)
+      }
     }
   }
 }

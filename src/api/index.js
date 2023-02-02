@@ -115,3 +115,13 @@ export const loginAPI = (data) => {
         data
     })
 }
+
+/**获取用户信息
+ * 参数：token【在请求头里】
+ * 返回 promise
+ */
+export const getUserInfoAPI = () => {
+    return requests({
+        url: "user/passport/auth/getUserInfo"
+    })
+}

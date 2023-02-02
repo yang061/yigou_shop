@@ -1,14 +1,27 @@
 //登录与注册的模块
-import { getCodeAPI, registerAPi, loginAPI } from '@/api'
+import { getCodeAPI, registerAPi, loginAPI, getUserInfoAPI } from '@/api'
+import { setToken, getToken } from '@/utils/token'
 //Search组件的小仓库
 const state = {
     //验证码
-    code: ''
+    code: '',
+    // 本地没有的时候是空，有的时候就是token
+    token: getToken(),
+    //用户信息
+    userInfo: {}
 }
 const mutations = {
     //获取验证码
     GETCODE (state, value) {
         state.code = value
+    },
+    // 登录
+    LOGIN (state, value) {
+        state.token = value
+    },
+    //获取用户信息
+    GETUSERINFO (state, value) {
+        state.userInfo = value
     }
 }
 const actions = {
@@ -35,8 +48,29 @@ const actions = {
         }
     },
     //登录业务token
-    async login ({ commit }, userInfo) {
-
+    async login ({ commit }, data) {
+        const res = await loginAPI(data)
+        //data:{ nickName: '123', name: '123', userId: 8, token: '322d05cee4b7412893c79470c6a7382b' }
+        //token:唯一标识符
+        if (res.code === 200) {
+            //用户已经成功登录且获得token
+            commit('LOGIN', res.data.token)
+            // 持久化存储
+            setToken(res.data.token)
+            return 'ok'
+        } else {
+            return Promise.reject(new Error('failed'))
+        }
+    },
+    //获取用户信息
+    async getUserInfo ({ commit }) {
+        const res = await getUserInfoAPI()
+        if (res.code == 200) {
+            commit('GETUSERINFO', res.data)
+            return 'ok'
+        } else {
+            return Promise.reject(new Error('failed'))
+        }
     }
 }
 

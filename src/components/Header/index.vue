@@ -6,11 +6,15 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <!-- 没有用户信息，显示这里 -->
+          <p v-if="!userInfo">
             <span>请</span>
             <!-- TIP 声明式导航，必须要有to属性（去哪） -->
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
+          </p>
+          <p v-else>
+            {{ userInfo.nickName }}
           </p>
         </div>
         <div class="typeList">
@@ -60,6 +64,12 @@ export default {
   data () {
     return {
       keyWord: ''
+    }
+  },
+  computed: {
+    // 用户名信息
+    userInfo () {
+      return this.$store.state.user.userInfo
     }
   },
   methods: {

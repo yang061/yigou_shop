@@ -14,7 +14,8 @@
             <router-link to="/register" class="register">免费注册</router-link>
           </p>
           <p v-else>
-            {{ userInfo.nickName }}
+            <a> {{ userName }}</a>
+            <a class="register" @click="loginOut">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -109,6 +110,18 @@ export default {
       }
 
 
+    },
+    //退出登录
+    loginOut () {
+      // 1.发请求，通知服务器退出登录【清除一些数据：token】
+      // 2.清除项目中的数据【userInfo,token】
+      try {
+        this.$store.dispatch('loginOut')
+        //回到首页
+        this.$router.push('/home')
+      } catch (error) {
+        alert('failed')
+      }
     }
   },
   mounted () {

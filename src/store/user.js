@@ -1,6 +1,6 @@
 //登录与注册的模块
-import { getCodeAPI, registerAPi, loginAPI, getUserInfoAPI } from '@/api'
-import { setToken, getToken } from '@/utils/token'
+import { getCodeAPI, registerAPi, loginAPI, getUserInfoAPI, loginOutAPI } from '@/api'
+import { setToken, getToken, removeToken } from '@/utils/token'
 //Search组件的小仓库
 const state = {
     //验证码
@@ -22,6 +22,13 @@ const mutations = {
     //获取用户信息
     GETUSERINFO (state, value) {
         state.userInfo = value
+    },
+    // 清除本地数据
+    CLEAR (state) {
+        state.token = ""
+        state.userInfo = {}
+        // 清空token
+        removeToken()
     }
 }
 const actions = {
@@ -67,6 +74,18 @@ const actions = {
         const res = await getUserInfoAPI()
         if (res.code == 200) {
             commit('GETUSERINFO', res.data)
+            return 'ok'
+        } else {
+            return Promise.reject(new Error('failed'))
+        }
+    },
+    //退出登录
+    async loginOut ({ commit }) {
+        //只是向服务器发送一次请求，通知服务器清除token
+        const res = await loginOutAPI()
+        if (res.code === 200) {
+            // 清除本地数据,action不能操作state
+            commit('CLEAR')
             return 'ok'
         } else {
             return Promise.reject(new Error('failed'))

@@ -125,3 +125,9 @@ export const getUserInfoAPI = () => {
         url: "user/passport/auth/getUserInfo"
     })
 }
+
+/**
+ * 退出登录
+ * @returns promise
+ */
+export const loginOutAPI = () => requests({ url: "/user/passport/logout" })

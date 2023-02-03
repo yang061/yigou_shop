@@ -93,5 +93,31 @@ export default
             meta: {
                 show: true //控制Footer组件是否显示
             }
+        },
+        {
+            // 个体中心页面
+            path: '/center',
+            name: 'center',
+            component: () => import("@/views/Center"),
+            meta: {
+                show: true //控制Footer组件是否显示
+            },
+            children: [
+                //二级路由
+                {
+                    path: '/center',
+                    redirect: '/center/myorder'
+                },
+                {
+                    //我的订单
+                    path: 'myorder',
+                    component: () => import('@/views/Center/myOrder')
+                },
+                {
+                    //我的订单
+                    path: 'grouporder',
+                    component: () => import('@/views/Center/groupOrder')
+                }
+            ]
         }
     ]

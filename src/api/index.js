@@ -171,3 +171,12 @@ export const getPayInfoAPI = (orderId) => requests({ url: `/payment/weixin/creat
 export const getPayStatusAPI = (orderId) => requests({
     url: `/payment/weixin/queryPayStatus/${orderId}
 ` })
+
+/**
+ * 获取个人中心的数据
+ * @param {*} page:页码, limit :每页显示的数据
+ * @returns promise
+ */
+export const getMyOrderAPI = (page, limit) => requests({
+    url: `/order/auth/${page}/${limit}
+` })

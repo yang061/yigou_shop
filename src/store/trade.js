@@ -28,7 +28,6 @@ const actions = {
     //获取用户订单信息
     async getOrderInfo ({ commit }) {
         const res = await getOrderInfoAPI()
-        console.log(res);
         if (res.code === 200) {
             commit('GETORDERINFO', res.data)
         }

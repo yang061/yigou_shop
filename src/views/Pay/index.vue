@@ -76,7 +76,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click="goPayFn">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -95,6 +95,12 @@
 <script>
 export default {
   name: 'myPay',
+  data () {
+    return {
+      // 存储支付信息
+      payInfo: {}
+    }
+  },
   computed: {
     // 订单编号
     orderId () {
@@ -105,15 +111,32 @@ export default {
     this.getPayInfo()
   },
   methods: {
+    //获取支付信息
     async getPayInfo () {
       const res = await this.$API.getPayInfoAPI(this.orderId)
       console.log(res);
       // 如果成功，存储支付信息
       if (res.code == 200) {
-
+        this.payInfo = res.data
       }
-    }
-  },
+    },
+    // 去支付点击事件
+    goPayFn () {
+      this.$alert(`<strong>这是 <i>HTML</i> 片段</strong>`, 'HTML 片段', {
+        dangerouslyUseHTMLString: true,
+        // 居中显示
+        center: true,
+        // 取消按钮
+        showCancelButton: true,
+        // 取消按钮文本
+        cancelButtonText: '支付遇见问题',
+        //确定按钮文本
+        confirmButtonText: '已支付成功',
+        //关闭右上角按钮
+        showClose: false
+      });
+    },
+  }
 }
 </script>
 

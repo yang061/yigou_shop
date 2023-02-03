@@ -21,9 +21,14 @@ import store from '@/store'
 import '@/mock/mockServe'
 //引入swiper样式
 import "swiper/css/swiper.css"
-
+//引入elementui
+import { Button, MessageBox } from 'element-ui'
+Vue.component(Button.name, Button)
+//注册全局组件，方法1
 Vue.config.productionTip = false
-
+//注册全局组件方法2(挂载在原型上)
+Vue.prototype.$msgBox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
 new Vue({
   render: h => h(App),
   beforeCreate () {

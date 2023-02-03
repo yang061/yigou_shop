@@ -92,8 +92,12 @@ export default {
       try {
         const { phone, password } = this;
         (phone && password) && await this.$store.dispatch('login', { phone, password })
-        // 路由跳转到home首页
-        this.$router.push('/home')
+        // 看路由的query中有没有redirect参数，有就跳到redirect中，没有就跳到home
+        // 因为在未登录时，判断了不能去的路由，，并且在redirect中存储了query参数，这样登陆后就会直接跳转到query的redirect路由
+        let toPath = this.$route.query.redirect || '/home'
+        if (toPath) {
+          this.$router.push(toPath)
+        }
       } catch (error) {
         alert(error.message)
       }

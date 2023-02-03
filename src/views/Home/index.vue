@@ -34,7 +34,7 @@ export default {
     ...mapState({
       //获取Vuex中state的floorList数据,数据在home组件里
       floorList: state => state.home.floorList
-    })
+    }),
 
   },
   mounted () {

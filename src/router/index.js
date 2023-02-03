@@ -7,7 +7,6 @@ Vue.use(VueRouter)
 
 // 引入路由信息模块
 import routes from '@/router/routers'
-import { removeToken } from '@/utils/token'
 // 先把VueRouter原型对象的push，先保存一份
 let orginPush = VueRouter.prototype.push
 // 先把VueRouter原型对象的replace，先保存一份
@@ -62,16 +61,16 @@ router.beforeEach(async (to, from, next) => {
     //    登录了才会有token，未登录没有
     let token = store.state.user.token
     //没有数据时，是空对象，空对象是真
-    let name = store.state.user.userInfo.name
+    let nickName = store.state.user.userInfo.nickName
     if (token) {
         // 用户已经登录了，不能去login
-        if (to.path === '/login' || to.path === "/register") {
+        if (to.path == '/login' || to.path == "/register") {
             // 回到首页
-            next('/')
+            next('/home')
         } else {
             //登录了，去的不是login 【home|search|shopcart】
             // 如果用户名有
-            if (name) {
+            if (nickName) {
                 next()
             } else {
                 // 没有用户名,派发action让仓库存储用户信息再跳转
@@ -88,8 +87,21 @@ router.beforeEach(async (to, from, next) => {
 
         }
     } else {
-        // 未登录
-        next()
+        // 未登录,不能去交易相关，不能去支付相关【pay/paysucess】,不能去个人中心
+        //未登录去上面的路由，==》登录
+        // 设置黑名单
+        const black = ['/trade', '/pay', '/paysuccess']
+        // center有二级路由，所以要单独拿出来
+        let toPath = to.path
+        // 出现了黑名单中的路由
+        if (black.indexOf(toPath) !== -1 || toPath.indexOf('/center') !== -1) {
+            // 把未登录时想去但是没去成的信息存取到路由中
+            next('/login?redirect=' + toPath)
+        } else {
+            // 去的不是黑名单的路由
+            next()
+        }
+
     }
 })
 

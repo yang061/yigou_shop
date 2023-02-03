@@ -16,9 +16,9 @@ const mutations = {
         state.code = value
     },
     // 登录
-    // LOGIN (state, value) {
-    //     state.token = value
-    // },
+    LOGIN (state) {
+        state.token = getToken()
+    },
     //获取用户信息
     GETUSERINFO (state, value) {
         state.userInfo = value
@@ -59,11 +59,16 @@ const actions = {
         const res = await loginAPI(data)
         //data:{ nickName: '123', name: '123', userId: 8, token: '322d05cee4b7412893c79470c6a7382b' }
         //token:唯一标识符
-        if (res.code === 200) {
+        if (res.code == 200) {
             //用户已经成功登录且获得token
             // commit('LOGIN', res.data.token)
             // 持久化存储
+            // BUG 当前登录，必须要刷新才能成功登录
+            // 原因：setToken(res.data.token) 无返回值
+            // 解决：添加return
             setToken(res.data.token)
+            commit('LOGIN')
+            // localStorage.setItem('TOKEN', res.data.token)
             return 'ok'
         } else {
             return Promise.reject(new Error(res.message))
@@ -75,15 +80,13 @@ const actions = {
         if (res.code == 200) {
             commit('GETUSERINFO', res.data)
             return 'ok'
-        } else {
-            return Promise.reject(new Error(res.message))
         }
     },
     //退出登录
     async loginOut ({ commit }) {
         //只是向服务器发送一次请求，通知服务器清除token
         const res = await loginOutAPI()
-        if (res.code === 200) {
+        if (res.code == 200) {
             // 清除本地数据,action不能操作state
             commit('CLEAR')
             return 'ok'

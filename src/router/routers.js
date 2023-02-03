@@ -66,5 +66,14 @@ export default
             path: '/shopcart',
             name: 'shopcart',
             component: () => import('@/views/ShopCart')
+        },
+        {
+            // 交易页面
+            path: '/trade',
+            name: 'trade',
+            component: () => import("@/views/Trade"),
+            meta: {
+                show: true //控制Footer组件是否显示
+            }
         }
     ]

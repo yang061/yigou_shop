@@ -131,3 +131,19 @@ export const getUserInfoAPI = () => {
  * @returns promise
  */
 export const loginOutAPI = () => requests({ url: "/user/passport/logout" })
+
+/**
+ * 获取用户地址信息
+ * @returns promise
+ */
+export const getUserAddressAPI = () => {
+    return requests({
+        url: '/user/userAddress/auth/findUserAddressList'
+    })
+}
+
+/**
+ * 获取用户订单信息
+ * @returns promise
+ */
+export const getOrderInfoAPI = () => requests({ url: '/order/auth/trade' })

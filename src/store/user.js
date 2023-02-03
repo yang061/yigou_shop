@@ -16,9 +16,9 @@ const mutations = {
         state.code = value
     },
     // 登录
-    LOGIN (state, value) {
-        state.token = value
-    },
+    // LOGIN (state, value) {
+    //     state.token = value
+    // },
     //获取用户信息
     GETUSERINFO (state, value) {
         state.userInfo = value
@@ -41,7 +41,7 @@ const actions = {
             commit('GETCODE', res.data)
             return 'ok'
         } else {
-            return Promise.reject(new Error('failed'))
+            return Promise.reject(new Error(res.message))
         }
     },
     // 注册
@@ -51,7 +51,7 @@ const actions = {
             // 注册成功,没有返回数据，不需要三连环,只需要给调用处返回成功与失败
             return 'ok'
         } else {
-            return Promise.reject(new Error('failed'))
+            return Promise.reject(new Error(res.message))
         }
     },
     //登录业务token
@@ -61,12 +61,12 @@ const actions = {
         //token:唯一标识符
         if (res.code === 200) {
             //用户已经成功登录且获得token
-            commit('LOGIN', res.data.token)
+            // commit('LOGIN', res.data.token)
             // 持久化存储
             setToken(res.data.token)
             return 'ok'
         } else {
-            return Promise.reject(new Error('failed'))
+            return Promise.reject(new Error(res.message))
         }
     },
     //获取用户信息
@@ -76,7 +76,7 @@ const actions = {
             commit('GETUSERINFO', res.data)
             return 'ok'
         } else {
-            return Promise.reject(new Error('failed'))
+            return Promise.reject(new Error(res.message))
         }
     },
     //退出登录
@@ -88,7 +88,7 @@ const actions = {
             commit('CLEAR')
             return 'ok'
         } else {
-            return Promise.reject(new Error('failed'))
+            return Promise.reject(new Error())
         }
     }
 }

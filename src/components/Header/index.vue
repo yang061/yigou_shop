@@ -7,14 +7,14 @@
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
           <!-- 没有用户信息，显示这里 -->
-          <p v-if="!userInfo">
+          <p v-if="!userInfo.nickName">
             <span>请</span>
             <!-- TIP 声明式导航，必须要有to属性（去哪） -->
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
           </p>
           <p v-else>
-            <a> {{ userName }}</a>
+            <a> {{ userInfo.nickName }}</a>
             <a class="register" @click="loginOut">退出登录</a>
           </p>
         </div>

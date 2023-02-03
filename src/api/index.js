@@ -162,3 +162,12 @@ export const SubmitOrderAPI = (tradeNo, data) => requests({ url: `/order/auth/su
  * @returns promise
  */
 export const getPayInfoAPI = (orderId) => requests({ url: `/payment/weixin/createNative/${orderId}` })
+
+/**
+ * 获取支付状态
+ * @param {*} orderId 订单号信息
+ * @returns promise
+ */
+export const getPayStatusAPI = (orderId) => requests({
+    url: `/payment/weixin/queryPayStatus/${orderId}
+` })

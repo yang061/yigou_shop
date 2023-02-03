@@ -84,5 +84,14 @@ export default
             meta: {
                 show: true //控制Footer组件是否显示
             }
+        },
+        {
+            // 支付成功页面
+            path: '/paysuccess',
+            name: 'paysuccess',
+            component: () => import("@/views/paySuccess"),
+            meta: {
+                show: true //控制Footer组件是否显示
+            }
         }
     ]

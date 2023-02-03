@@ -11,6 +11,8 @@ Vue.component(typeNav.name, typeNav)
 Vue.component(CaRousel.name, CaRousel)
 Vue.component(myPagination.name, myPagination)
 
+// 统一接口api文件夹里面全部请求函数
+import * as API from "@/api"
 // 引入路由
 import router from '@/router'
 //引入仓库
@@ -27,6 +29,8 @@ new Vue({
   beforeCreate () {
     // 注册全局事件总线
     Vue.prototype.$bus = this
+    // 注册api到Vue的原型里
+    Vue.prototype.$API = API
   },
   // 注册路由,kv一致省略v，注意router是小写
   // 为什么要注册路由信息=> 让组件身上拥有$router和$route属性

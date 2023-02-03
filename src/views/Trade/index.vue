@@ -50,13 +50,13 @@
             />
           </li>
           <li>
-            <p>
+            <p class="skuName">
               {{ order.skuName }}
             </p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥{{ order.orderPrice.toFixed(2) }}</h3>
+            <h3>￥{{ order.orderPrice }}</h3>
           </li>
           <li>X{{ order.skuNum }}</li>
           <li>有货</li>
@@ -84,7 +84,7 @@
             ><i>{{ orderInfo.totalNum }}</i
             >件商品，总商品金额</b
           >
-          <span>¥{{ orderInfo.totalAmount.toFixed(2) }}</span>
+          <span>¥{{ orderInfo.totalAmount }}</span>
         </li>
         <li>
           <b>返现：</b>
@@ -108,7 +108,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -119,7 +119,9 @@ export default {
   name: 'myTrade',
   data () {
     return {
-      message: ''
+      message: '',
+      // 订单编号
+      orderId: ''
     }
   },
   mounted () {
@@ -137,7 +139,7 @@ export default {
     userDefaultAddress () {
       // find：查找当前数据中符合条件的元素返回,作为最终的结果
       return this.addressInfo.find(item => item.isDefault == 1) || {}
-    }
+    },
   },
   methods: {
     // 改变默认选中的地址
@@ -149,6 +151,33 @@ export default {
       });
       // 保留当前的
       address.isDefault = 1
+
+    },
+    // 提交订单
+    async submitOrder () {
+
+      // 需要两个参数,tradeNo【交易编码】
+      let { consignee, phoneNum, fullAddress } = this.userDefaultAddress
+      let data = {
+        consignee, //最终收件人的名字
+        consigneeTel: phoneNum, //最终收件人的电话号码
+        deliveryAddress: fullAddress,  //最终收件人的地址
+        paymentWay: 'ONLINE', //支付方式
+        orderComment: this.message, //买家留言
+        orderDetailList: this.orderInfo.detailArrayList //商品订单
+      }
+      let { tradeNo } = this.orderInfo
+      const res = await this.$API.SubmitOrderAPI(tradeNo, data)
+      console.log(res);
+      if (res.code == 200) {
+        // 提交订单成功,存储订单编号
+        this.orderId = res.data
+        // 路由跳转与传参(订单编号)
+        this.$router.push('/pay?orderId=' + this.orderId)
+      } else {
+        // 提交失败
+        alert(res.message)
+      }
 
     }
   },
@@ -294,7 +323,14 @@ export default {
       .list {
         display: flex;
         justify-content: space-between;
-
+        align-items: center;
+        .skuName {
+          overflow: hidden;
+          white-space: nowrap;
+          // 溢出显示省略号
+          text-overflow: ellipsis;
+          width: 200px;
+        }
         li {
           line-height: 30px;
 

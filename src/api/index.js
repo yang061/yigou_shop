@@ -147,3 +147,18 @@ export const getUserAddressAPI = () => {
  * @returns promise
  */
 export const getOrderInfoAPI = () => requests({ url: '/order/auth/trade' })
+
+/**
+ * 提交订单接口
+ * @param {*} tradeNo 交易编号(拼接在路径中)
+ * @param {*} data {consignee：收件人姓名，consigneeTel：收件人电话，deliveryAddress：收件地址，paymentWay：支付方式(ONLINE代表在线)，orderComment：订单备注，orderDetailList：存储多个商品对象的数组}
+ * @returns promise
+ */
+export const SubmitOrderAPI = (tradeNo, data) => requests({ url: `/order/auth/submitOrder?tradeNo=${tradeNo}`, method: 'post', data })
+
+/**
+ * 获取支付信息
+ * @param {*} orderId 订单号
+ * @returns promise
+ */
+export const getPayInfoAPI = (orderId) => requests({ url: `/payment/weixin/createNative/${orderId}` })

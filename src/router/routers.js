@@ -75,5 +75,14 @@ export default
             meta: {
                 show: true //控制Footer组件是否显示
             }
+        },
+        {
+            // 交易页面
+            path: '/pay',
+            name: 'pay',
+            component: () => import("@/views/Pay"),
+            meta: {
+                show: true //控制Footer组件是否显示
+            }
         }
     ]

@@ -30,7 +30,15 @@ Vue.config.productionTip = false
 Vue.prototype.$msgBox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
 
+//引入图片懒加载插件
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload, {
+  // 懒加载默认的图片
+  loading: require('@/assets/images/loading.gif')
+})
 
+// 引入校验插件
+import validate from '@/plugins/validate'
 
 new Vue({
   render: h => h(App),

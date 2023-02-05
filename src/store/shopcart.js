@@ -46,7 +46,6 @@ const actions = {
             // 把每一个promise存到数组中
             promiseAll.push(promise)
         })
-        console.log(Promise.all(promiseAll));
         // 只有全部的p1|p2...都成功，返回值才是成功
         // 如果有一个失败，返回值即为失败
         return Promise.all(promiseAll)

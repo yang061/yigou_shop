@@ -74,6 +74,14 @@ export default
             component: () => import("@/views/Trade"),
             meta: {
                 show: true //控制Footer组件是否显示
+            },
+            beforeEnter: (to, from, next) => {
+                // 去交易页面，如果来的是购物车路由，才放行，否则，留在当前
+                if (from.path == "/shopcart") {
+                    next()
+                } else {
+                    next(false)
+                }
             }
         },
         {
@@ -83,6 +91,14 @@ export default
             component: () => import("@/views/Pay"),
             meta: {
                 show: true //控制Footer组件是否显示
+            },
+            beforeEnter: (to, from, next) => {
+                // 如果是从交易来放行，否则留在当前
+                if (from.path == "/trade") {
+                    next()
+                } else {
+                    next(false)
+                }
             }
         },
         {

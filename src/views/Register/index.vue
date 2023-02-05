@@ -11,40 +11,60 @@
       <div class="content">
         <label>手机号:</label>
         <input
-          type="tel"
           placeholder="请输入你的手机号"
           v-model="userInfo.phone"
+          name="phone"
+          v-validate="{ required: true, regex: /^1\d{10}$/ }"
+          :class="{ invalid: errors.has('phone') }"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("phone") }}</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="userInfo.code" />
+        <input
+          placeholder="请输入验证码"
+          v-model="userInfo.code"
+          name="code"
+          v-validate="{ required: true, regex: /^\d{6}$/ }"
+          :class="{ invalid: errors.has('code') }"
+        />
         <button class="getCodeBtn" @click="getCodeFn">获取验证码</button>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("code") }}</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
         <input
-          type="password"
-          placeholder="请输入你的登录密码"
+          type="text"
+          placeholder="请输入密码"
           v-model="userInfo.password"
+          name="password"
+          v-validate="{ required: true, regex: /^[0-9A-Za-z]{8,20}$/ }"
+          :class="{ invalid: errors.has('password') }"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("password") }}</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
         <input
-          type="password"
+          type="text"
           placeholder="请输入确认密码"
           v-model="userInfo.rePassword"
+          name="rePassword"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg" v-if="userInfo.rePassword !== userInfo.password"
+          >确认密码和密码应该相同</span
+        >
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox" :checked="userInfo.agree" />
-        <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <input
+          type="checkbox"
+          v-model="userInfo.agree"
+          name="agree"
+          v-validate="{ required: true, isAgree: true }"
+          :class="{ invalid: errors.has('agree') }"
+        />
+        <span>同意协议并注册《用户协议》</span>
+        <span class="error-msg">{{ errors.first("agree") }}</span>
       </div>
       <div class="btn">
         <button @click="RegisterFn">完成注册</button>
@@ -104,14 +124,19 @@ export default {
     },
     // 用户注册=》点击事件
     async RegisterFn () {
-      try {
-        const { phone, password, code, rePassword } = this.userInfo;
-        // 前面为真才执行后面的,上一行要加分号
-        (phone && code && password == rePassword) && await this.$store.dispatch('register', { phone, password, code })
-        // 路由跳转
-        this.$router.push('/login')
-      } catch (error) {
-        alert(error.message)
+      const { phone, password, code, rePassword } = this.userInfo;
+      const success = await this.$validator.validateAll();
+      //全部表单验证，js兜底校验,都成功了再发请求，有一个不成功都不行
+      if (success && rePassword === password) {
+        try {
+
+          // 前面为真才执行后面的,上一行要加分号
+          await this.$store.dispatch('register', { phone, password, code })
+          // 路由跳转
+          this.$router.push('/login')
+        } catch (error) {
+          alert(error.message)
+        }
       }
 
     }

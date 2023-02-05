@@ -168,7 +168,6 @@ export default {
       }
       let { tradeNo } = this.orderInfo
       const res = await this.$API.SubmitOrderAPI(tradeNo, data)
-      console.log(res);
       if (res.code == 200) {
         // 提交订单成功,存储订单编号
         this.orderId = res.data

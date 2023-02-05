@@ -18,18 +18,24 @@
               <div class="input-text clearFix">
                 <span></span>
                 <input
-                  type="text"
-                  placeholder="邮箱/用户名/手机号"
+                  placeholder="请输入你的手机号"
                   v-model="phone"
+                  name="phone"
+                  v-validate="{ required: true, regex: /^1\d{10}$/ }"
+                  :class="{ invalid: errors.has('phone') }"
                 />
+                <i class="error-msg">{{ errors.first("phone") }}</i>
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
                 <input
-                  type="password"
-                  placeholder="请输入密码"
+                  placeholder="请输入你的密码"
                   v-model="password"
+                  name="password"
+                  v-validate="{ required: true, regex: /^[0-9A-Za-z]{8,20}$/ }"
+                  :class="{ invalid: errors.has('password') }"
                 />
+                <i class="error-msg">{{ errors.first("password") }}</i>
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -67,12 +73,10 @@
         <li>联系客服</li>
         <li>商家入驻</li>
         <li>营销中心</li>
-        <li>手机尚品汇</li>
         <li>销售联盟</li>
-        <li>尚品汇社区</li>
       </ul>
-      <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
-      <div class="beian">京ICP备19006430号</div>
+      <div class="address">地址：流浪村</div>
+      <div class="beian">888888888</div>
     </div>
   </div>
 </template>
@@ -89,17 +93,21 @@ export default {
   methods: {
     // 登录的回调函数
     async loginFn () {
-      try {
-        const { phone, password } = this;
-        (phone && password) && await this.$store.dispatch('login', { phone, password })
-        // 看路由的query中有没有redirect参数，有就跳到redirect中，没有就跳到home
-        // 因为在未登录时，判断了不能去的路由，，并且在redirect中存储了query参数，这样登陆后就会直接跳转到query的redirect路由
-        let toPath = this.$route.query.redirect || '/home'
-        if (toPath) {
-          this.$router.push(toPath)
+      const success = await this.$validator.validateAll();
+      if (success) {
+        //js兜底校验通过
+        try {
+          const { phone, password } = this;
+          await this.$store.dispatch('login', { phone, password })
+          // 看路由的query中有没有redirect参数，有就跳到redirect中，没有就跳到home
+          // 因为在未登录时，判断了不能去的路由，，并且在redirect中存储了query参数，这样登陆后就会直接跳转到query的redirect路由
+          let toPath = this.$route.query.redirect || '/home'
+          if (toPath) {
+            this.$router.push(toPath)
+          }
+        } catch (error) {
+          alert(error.message)
         }
-      } catch (error) {
-        alert(error.message)
       }
     }
   }
@@ -171,7 +179,13 @@ export default {
 
           .input-text {
             margin-bottom: 16px;
-
+            position: relative;
+            .error-msg {
+              position: absolute;
+              top: 100%;
+              left: 40px;
+              color: red;
+            }
             span {
               float: left;
               width: 37px;

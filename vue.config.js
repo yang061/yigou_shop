@@ -1,6 +1,8 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+  //去除map文件
+  productionSourceMap: false,
   lintOnSave: false,
   devServer: {
     host: 'localhost',

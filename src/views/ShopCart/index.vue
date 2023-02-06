@@ -77,8 +77,6 @@
       </div>
       <div class="option">
         <a @click="deleteAllCheckedCart">删除选中的商品</a>
-        <a href="#none">移到我的关注</a>
-        <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
         <div class="chosed">已选择 <span>0</span>件商品</div>

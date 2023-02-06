@@ -5,7 +5,7 @@
     <div class="top">
       <div class="container">
         <div class="loginList">
-          <p>尚品汇欢迎您！</p>
+          <p>乐购欢迎您！</p>
           <!-- 没有用户信息，显示这里 -->
           <p v-if="!userInfo.nickName">
             <span>请</span>
@@ -21,10 +21,8 @@
         <div class="typeList">
           <router-link to="/center/myorder">我的订单</router-link>
           <router-link to="/shopcart">我的购物车</router-link>
-          <a href="###">我的尚品汇</a>
-          <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
-          <a href="###">关注尚品汇</a>
+          <a href="###">关注乐购</a>
           <a href="###">合作招商</a>
           <a href="###">商家后台</a>
         </div>
@@ -34,8 +32,8 @@
     <div class="bottom">
       <h1 class="logoArea">
         <!-- 跳转到主页 -->
-        <router-link class="logo" title="尚品汇" to="/home">
-          <img src="@/assets/images/logo.png" alt="" />
+        <router-link class="logo" title="乐购商城" to="/home">
+          <h1>乐购商城</h1>
         </router-link>
       </h1>
       <div class="searchArea">
@@ -183,9 +181,11 @@ export default {
       float: left;
 
       .logo {
-        img {
+        h1 {
           width: 175px;
           margin: 25px 45px;
+          font-size: 24px;
+          color: #ea4a36;
         }
       }
     }

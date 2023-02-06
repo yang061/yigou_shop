@@ -48,8 +48,8 @@
             <li>夺宝岛</li>
             <li>DIY装机</li>
             <li>延保服务</li>
-            <li>尚品汇E卡</li>
-            <li>尚品汇通信</li>
+            <li>乐购E卡</li>
+            <li>乐购通信</li>
           </ul>
         </div>
         <div class="footerItem">
@@ -97,8 +97,8 @@
           </li>
           <li>关于我们</li>
         </ul>
-        <p>地址：北京市昌平区宏福科技园综合楼6层</p>
-        <p>京ICP备19006430号</p>
+        <p>流浪村</p></p>
+        <p>88888888</p>
       </div>
     </div>
   </div>
